@@ -2,6 +2,10 @@ import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
+// ============================================
+// INTERFACES
+// ============================================
+
 interface Category {
   id: number;
   name: string;
@@ -39,244 +43,155 @@ interface Testimonial {
   product: string;
 }
 
+// ============================================
+// COMPONENT
+// ============================================
+
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-    <!-- ============================================== -->
-    <!-- HERO SECTION - Full Width Immersive -->
-    <!-- ============================================== -->
-    <section class="hero-section min-h-[85vh] flex items-center">
-      <div class="max-w-7xl mx-auto w-full">
-        <div class="hero-content flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <!-- Hero Text -->
-          <div class="flex-1 text-center lg:text-start">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm text-gray-200 mb-8">
-              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              Free Shipping on Orders Over \$500
-            </div>
-            
-            <h1 class="hero-title leading-tight">
-              Discover<br/>
-              <span class="bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Timeless Luxury
-              </span>
-            </h1>
-            
-            <p class="hero-subtitle mt-6 text-lg lg:text-xl leading-relaxed">
-              Curated collections of the world's finest luxury goods. 
-              From Swiss timepieces to Parisian haute couture — experience excellence.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start">
-              <a routerLink="/store/new-arrivals" class="btn-cta text-lg px-10 py-5">
-                <span>Shop New Arrivals</span>
-                <svg class="w-5 h-5 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                </svg>
-              </a>
-              <a routerLink="/store/brands" class="btn-glass px-8 py-5">
-                Explore Brands
-              </a>
-            </div>
-            
-            <!-- Trust Indicators -->
-            <div class="flex items-center gap-8 mt-12 justify-center lg:justify-start">
-              <div class="text-center">
-                <span class="text-2xl font-bold text-white">250K+</span>
-                <p class="text-sm text-gray-400">Happy Customers</p>
-              </div>
-              <div class="w-px h-10 bg-gray-700"></div>
-              <div class="text-center">
-                <span class="text-2xl font-bold text-white">4.9</span>
-                <p class="text-sm text-gray-400">Average Rating</p>
-              </div>
-              <div class="w-px h-10 bg-gray-700"></div>
-              <div class="text-center">
-                <span class="text-2xl font-bold text-white">500+</span>
-                <p class="text-sm text-gray-400">Luxury Brands</p>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Hero Image Composition -->
-          <div class="flex-1 relative hidden lg:block">
-            <div class="relative">
-              <!-- Background Glow -->
-              <div class="absolute inset-0 bg-gradient-to-br from-primary-500/30 to-purple-500/30 rounded-3xl blur-3xl scale-110"></div>
-              
-              <!-- Main Image -->
-              <div class="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=700&fit=crop" 
-                  alt="Luxury Shopping"
-                  class="w-full h-auto rounded-3xl shadow-2xl"
-                />
-                
-                <!-- Floating Card 1 -->
-                <div class="absolute -start-12 top-1/4 bg-white/95 dark:bg-dark-card/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-float">
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
-                      <span class="text-2xl">⌚</span>
-                    </div>
-                    <div>
-                      <p class="text-sm font-semibold text-gray-900 dark:text-white">Swiss Watches</p>
-                      <p class="text-xs text-gray-500">2,500+ Items</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Floating Card 2 -->
-                <div class="absolute -end-8 bottom-1/4 bg-white/95 dark:bg-dark-card/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-float" style="animation-delay: 1s;">
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                      <span class="text-2xl">💎</span>
-                    </div>
-                    <div>
-                      <p class="text-sm font-semibold text-gray-900 dark:text-white">Fine Jewelry</p>
-                      <p class="text-xs text-gray-500">1,800+ Items</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit, OnDestroy {
 
-    <!-- ============================================== -->
-    <!-- FEATURED CATEGORIES - Visual Grid -->
-    <!-- ============================================== -->
-    <section class="py-16 lg:py-24 bg-white dark:bg-dark-bg">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <span class="text-primary-600 font-medium">EXPLORE</span>
-          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mt-2">Shop by Category</h2>
-          <p class="text-gray-500 mt-3 max-w-2xl mx-auto">
-            Browse our carefully curated categories featuring the finest selection of luxury goods
-          </p>
-        </div>
-        
-        <!-- Large Category Grid -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-          @for (category of featuredCategories(); track category.id; let i = $index) {
-            <a 
-              [routerLink]="['/store/category', category.slug]" 
-              class="group relative rounded-2xl overflow-hidden"
-              [class]="i === 0 ? 'col-span-2 row-span-2' : ''"
-            >
-              <div class="aspect-square">
-                <img 
-                  [src]="category.image" 
-                  [alt]="category.name"
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div class="absolute inset-x-0 bottom-0 p-6">
-                <span class="text-3xl mb-2 block">{{ category.icon }}</span>
-                <h3 class="text-xl lg:text-2xl font-bold text-white">{{ category.name }}</h3>
-                <p class="text-gray-300 text-sm mt-1">{{ category.productCount }} Products</p>
-              </div>
-            </a>
-          }
-        </div>
-        
-        <!-- View All Categories -->
-        <div class="text-center mt-10">
-          <a routerLink="/store/category/all" class="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700">
-            View All Categories
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
+  // ============================================
+  // PRIVATE PROPERTIES
+  // ============================================
 
-    <!-- ============================================== -->
-    <!-- FLASH SALE - Urgency Section -->
-    <!-- ============================================== -->
-    <section class="py-16 lg:py-20 bg-gradient-to-br from-red-600 via-red-700 to-rose-800 text-white relative overflow-hidden">
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 start-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 end-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-      </div>
-      
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-8 mb-12">
-          <div>
-            <div class="flex items-center gap-3 mb-3">
-              <span class="text-4xl">⚡</span>
-              <h2 class="text-3xl lg:text-4xl font-bold">Flash Sale</h2>
-            </div>
-            <p class="text-white/80 text-lg">Up to 70% off on selected premium items</p>
-          </div>
-          
-          <!-- Countdown Timer -->
-          <div class="flex items-center gap-4">
-            <div class="text-center">
-              <div class="w-16 h-16 lg:w-20 lg:h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                <span class="text-2xl lg:text-3xl font-bold">{{ hours() }}</span>
-              </div>
-              <span class="text-sm text-white/70 mt-2 block">Hours</span>
-            </div>
-            <span class="text-3xl font-bold">:</span>
-            <div class="text-center">
-              <div class="w-16 h-16 lg:w-20 lg:h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                <span class="text-2xl lg:text-3xl font-bold">{{ minutes() }}</span>
-              </div>
-              <span class="text-sm text-white/70 mt-2 block">Minutes</span>
-            </div>
-            <span class="text-3xl font-bold">:</span>
-            <div class="text-center">
-              <div class="w-16 h-16 lg:w-20 lg:h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                <span class="text-2xl lg:text-3xl font-bold">{{ seconds() }}</span>
-              </div>
-              <span class="text-sm text-white/70 mt-2 block">Seconds</span>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Flash Sale Products -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-          @for (product of flashSaleProducts(); track product.id) {
-            <a [routerLink]="['/store/product', product.id]" class="bg-white dark:bg-dark-card rounded-2xl overflow-hidden group shadow-xl">
-              <div class="relative aspect-square overflow-hidden">
-                <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                @if (product.discount) {
-                  <span class="absolute top-3 start-3 px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
-                    -{{ product.discount }}%
-                  </span>
-                }
-              </div>
-              <div class="p-4">
-                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ product.brand }}</p>
-                <h3 class="font-medium text-gray-900 dark:text-white line-clamp-1 mt-1">{{ product.name }}</h3>
-                <div class="flex items-center gap-2 mt-2">
-                  <span class="text-lg font-bold text-red-600">\${{ product.price }}</span>
-                  @if (product.originalPrice) {
-                    <span class="text-sm text-gray-400 line-through">\${{ product.originalPrice }}</span>
-                  }
-                </div>
-              </div>
-            </a>
-          }
-        </div>
-        
-        <div class="text-center mt-10">
-          <a routerLink="/store/category/flash-sale" class="btn-glass bg-white/20 hover:bg-white/30 px-8 py-4 text-white border-white/30">
-            View All Sale Items →
-          </a>
-        </div>
-      </div>
-    </section>
+  private timerInterval: any;
 
-    <!-- ============================================== -->
-    <!-- NEW ARRIVALS - Horizontal Scroll -->
-    <!-- ============================================== -->
-    <section class="py-16 lg:py-24 bg-gray-50 dark:bg-dark-surface">
-      <div class="
+  // ============================================
+  // PUBLIC SIGNALS - Timer
+  // ============================================
+
+  hours = signal('02');
+  minutes = signal('45');
+  seconds = signal('30');
+
+  // ============================================
+  // PUBLIC PROPERTIES - Static Data
+  // ============================================
+
+  bestSellerTabs = ['All Products', 'Watches', 'Jewelry', 'Bags', 'Fashion'];
+  activeBestSellerTab = signal('All Products');
+  featuredBrands = ['ROLEX', 'CARTIER', 'LOUIS VUITTON', 'GUCCI', 'HERMÈS', 'CHANEL'];
+
+  // ============================================
+  // PUBLIC SIGNALS - Categories
+  // ============================================
+
+  featuredCategories = signal<Category[]>([
+    { id: 1, name: 'Luxury Watches', icon: '⌚', slug: 'watches', productCount: 2500, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop' },
+    { id: 2, name: 'Fine Jewelry', icon: '💎', slug: 'jewelry', productCount: 1800, image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop' },
+    { id: 3, name: 'Designer Bags', icon: '👜', slug: 'bags', productCount: 1200, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop' },
+    { id: 4, name: 'Premium Apparel', icon: '👔', slug: 'apparel', productCount: 3500, image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop' },
+    { id: 5, name: 'Luxury Shoes', icon: '👟', slug: 'shoes', productCount: 950, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop' },
+  ]);
+
+  // ============================================
+  // PUBLIC SIGNALS - Flash Sale Products
+  // ============================================
+
+  flashSaleProducts = signal<Product[]>([
+    { id: 1, name: 'Titanium Chronograph', brand: 'AETHER', price: 75, originalPrice: 150, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop', rating: 5, reviewCount: 120, discount: 50 },
+    { id: 2, name: 'Azure Leather Tote', brand: 'LUXE', price: 125, originalPrice: 250, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop', rating: 4, reviewCount: 89, discount: 50 },
+    { id: 3, name: 'Aura Pro Max Headphones', brand: 'SOUNDLUX', price: 299, originalPrice: 399, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop', rating: 5, reviewCount: 234, discount: 25 },
+    { id: 4, name: 'Pearl Necklace Set', brand: 'GEMS', price: 89, originalPrice: 178, image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop', rating: 4, reviewCount: 67, discount: 50 },
+  ]);
+
+  // ============================================
+  // PUBLIC SIGNALS - New Arrivals
+  // ============================================
+
+  newArrivals = signal<Product[]>([
+    { id: 5, name: 'Monaco Wool Blazer', brand: 'LUXE', price: 895, image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop', rating: 5, reviewCount: 156, isNew: true },
+    { id: 6, name: 'Velvet Evening Loafers', brand: 'ARTISAN', price: 425, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop', rating: 4, reviewCount: 89, isNew: true },
+    { id: 7, name: 'Statement Perfume 60ml', brand: 'ESSENCE', price: 195, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=500&fit=crop', rating: 5, reviewCount: 312, isNew: true },
+    { id: 8, name: 'Titanium Aviator Glasses', brand: 'OPTICA', price: 380, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=500&fit=crop', rating: 4, reviewCount: 78, isNew: true },
+    { id: 9, name: 'Cashmere Infinity Scarf', brand: 'HERMÈS', price: 650, image: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=500&fit=crop', rating: 5, reviewCount: 45, isNew: true },
+  ]);
+
+  // ============================================
+  // PUBLIC SIGNALS - Best Sellers
+  // ============================================
+
+  bestSellers = signal<Product[]>([
+    { id: 10, name: 'Submariner Date Classic', brand: 'ROLEX', price: 14500, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop', rating: 5, reviewCount: 234 },
+    { id: 11, name: 'Classic Flap Bag Medium', brand: 'CHANEL', price: 8200, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop', rating: 5, reviewCount: 189, discount: 10 },
+    { id: 12, name: 'Panthère de Cartier Ring', brand: 'CARTIER', price: 12500, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop', rating: 5, reviewCount: 156 },
+    { id: 13, name: 'Royal Oak Offshore', brand: 'AUDEMARS PIGUET', price: 28500, image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=400&fit=crop', rating: 5, reviewCount: 98, discount: 15 },
+    { id: 14, name: 'Keepall Bandoulière 55', brand: 'LOUIS VUITTON', price: 2490, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop', rating: 5, reviewCount: 267 },
+    { id: 15, name: 'Speedmaster Moonwatch', brand: 'OMEGA', price: 6500, image: 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400&h=400&fit=crop', rating: 5, reviewCount: 312 },
+    { id: 16, name: 'Birkin 30 Togo Leather', brand: 'HERMÈS', price: 15000, image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=400&h=400&fit=crop', rating: 5, reviewCount: 89 },
+    { id: 17, name: 'Tennis Bracelet Diamond', brand: 'TIFFANY & CO.', price: 9800, image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop', rating: 5, reviewCount: 145 },
+  ]);
+
+  // ============================================
+  // PUBLIC SIGNALS - Testimonials
+  // ============================================
+
+  testimonials = signal<Testimonial[]>([
+    { id: 1, name: 'Sarah Mitchell', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', rating: 5, text: 'Absolutely stunning quality! The Cartier ring exceeded all my expectations. The packaging and delivery experience felt truly luxurious.', product: 'Panthère Ring' },
+    { id: 2, name: 'James Chen', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', rating: 5, text: 'My Rolex arrived in perfect condition with all documentation. The authentication process gave me complete confidence in my purchase.', product: 'Submariner Date' },
+    { id: 3, name: 'Emma Thompson', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop', rating: 5, text: 'The customer service is exceptional. They helped me find the perfect Louis Vuitton bag and the returns process was seamless.', product: 'Keepall 55' },
+  ]);
+
+  // ============================================
+  // PUBLIC SIGNALS - Recommended Products
+  // ============================================
+
+  recommendedProducts = signal<(Product & { matchScore: number; reason: string })[]>([
+    { id: 50, name: 'GMT-Master II Pepsi', brand: 'ROLEX', price: 18500, image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=400&h=400&fit=crop', rating: 5, reviewCount: 178, matchScore: 98, reason: 'Based on your interest in luxury watches' },
+    { id: 51, name: 'Neverfull MM Damier', brand: 'LOUIS VUITTON', price: 1960, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop', rating: 5, reviewCount: 342, matchScore: 95, reason: 'Popular in your size preference' },
+    { id: 52, name: 'Love Bracelet Gold', brand: 'CARTIER', price: 6900, image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop', rating: 5, reviewCount: 256, matchScore: 92, reason: 'Trending in jewelry you viewed' },
+    { id: 53, name: 'City Steamer PM', brand: 'LOUIS VUITTON', price: 3650, image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=400&h=400&fit=crop', rating: 5, reviewCount: 89, matchScore: 89, reason: 'Matches your style preferences' },
+    { id: 54, name: 'Datejust 36 Jubilee', brand: 'ROLEX', price: 12800, image: 'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=400&h=400&fit=crop', rating: 5, reviewCount: 145, matchScore: 87, reason: 'Similar to items in your wishlist' },
+    { id: 55, name: 'Kelly 28 Epsom', brand: 'HERMÈS', price: 12800, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop', rating: 5, reviewCount: 67, matchScore: 85, reason: 'Customers like you also bought' },
+    { id: 56, name: 'Santos de Cartier', brand: 'CARTIER', price: 7200, image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=400&fit=crop', rating: 5, reviewCount: 198, matchScore: 83, reason: 'Based on your browsing history' },
+    { id: 57, name: 'Classic Sunglasses', brand: 'GUCCI', price: 420, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop', rating: 4, reviewCount: 234, matchScore: 80, reason: 'Complements recent purchases' },
+  ]);
+
+  // ============================================
+  // LIFECYCLE HOOKS
+  // ============================================
+
+  ngOnInit(): void {
+    this.startCountdown();
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
+
+  // ============================================
+  // PRIVATE METHODS
+  // ============================================
+
+  private startCountdown(): void {
+    let totalSeconds = 2 * 3600 + 45 * 60 + 30;
+
+    this.timerInterval = setInterval(() => {
+      if (totalSeconds > 0) {
+        totalSeconds--;
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        this.hours.set(h.toString().padStart(2, '0'));
+        this.minutes.set(m.toString().padStart(2, '0'));
+        this.seconds.set(s.toString().padStart(2, '0'));
+      }
+    }, 1000);
+  }
+
+  // ============================================
+  // PUBLIC METHODS
+  // ============================================
+
+  toggleWishlist(productId: number): void {
+    console.log('Toggle wishlist for product:', productId);
+  }
+}

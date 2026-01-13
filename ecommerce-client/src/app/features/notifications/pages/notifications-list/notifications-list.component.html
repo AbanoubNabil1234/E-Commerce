@@ -1,0 +1,133 @@
+<div class="notifications-page">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <svg class="title-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                {{ 'NOTIFICATIONS.TITLE' | translate }}
+                @if (service.unreadCount() > 0) {
+                <span class="unread-badge">{{ service.unreadCount() }}</span>
+                }
+            </h1>
+            <p class="page-subtitle">{{ 'NOTIFICATIONS.SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn-secondary" (click)="markAllAsRead()" [disabled]="service.unreadCount() === 0">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        @for (tab of filterTabs; track tab.key) {
+        <button class="filter-tab" [class.active]="activeTab() === tab.key" (click)="setActiveTab(tab.key)">
+            {{ tab.label | translate }}
+            @if (tab.count !== undefined && tab.count > 0) {
+            <span class="tab-count">{{ tab.count }}</span>
+            }
+        </button>
+        }
+    </div>
+
+    <!-- Notifications List -->
+    <div class="notifications-list">
+        @if (service.loading()) {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>{{ 'COMMON.LOADING' | translate }}</p>
+        </div>
+        } @else if (filteredNotifications().length === 0) {
+        <div class="empty-state">
+            <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <h3>{{ 'NOTIFICATIONS.EMPTY' | translate }}</h3>
+            <p>{{ 'NOTIFICATIONS.EMPTY_DESC' | translate }}</p>
+        </div>
+        } @else {
+        @for (notification of filteredNotifications(); track notification.id) {
+        <div class="notification-card" [class.unread]="!notification.isRead"
+            [class.expanded]="expandedId() === notification.id" (click)="toggleExpand(notification)">
+
+            <!-- Icon -->
+            <div class="notification-icon" [style.background]="getTypeColor(notification.type) + '20'">
+                <span [style.color]="getTypeColor(notification.type)">
+                    {{ getTypeIcon(notification.type) }}
+                </span>
+            </div>
+
+            <!-- Content -->
+            <div class="notification-content">
+                <div class="notification-header">
+                    <h3 class="notification-title">{{ notification.title }}</h3>
+                    <div class="notification-meta">
+                        <span class="notification-badge" [style.background]="getTypeColor(notification.type)">
+                            {{ getTypeLabel(notification.type) }}
+                        </span>
+                        <span class="notification-time">
+                            {{ service.formatRelativeTime(notification.createdAt) }}
+                        </span>
+                    </div>
+                </div>
+                <p class="notification-message">{{ notification.message }}</p>
+
+                <!-- Actions (shown when expanded) -->
+                @if (expandedId() === notification.id) {
+                <div class="notification-actions" (click)="$event.stopPropagation()">
+                    @if (notification.actionUrl) {
+                    <a [routerLink]="notification.actionUrl" class="btn-primary">
+                        {{ 'NOTIFICATIONS.VIEW_DETAILS' | translate }}
+                    </a>
+                    }
+                    @if (!notification.isRead) {
+                    <button class="btn-secondary" (click)="markAsRead(notification)">
+                        {{ 'NOTIFICATIONS.MARK_READ' | translate }}
+                    </button>
+                    }
+                    <button class="btn-ghost" (click)="deleteNotification(notification)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+                }
+            </div>
+
+            <!-- Unread indicator -->
+            @if (!notification.isRead) {
+            <div class="unread-indicator"></div>
+            }
+        </div>
+        }
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+    <div class="pagination">
+        <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">
+            {{ 'COMMON.PREVIOUS' | translate }}
+        </button>
+
+        @for (page of pageNumbers(); track page) {
+        <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+            {{ page }}
+        </button>
+        }
+
+        <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">
+            {{ 'COMMON.NEXT' | translate }}
+        </button>
+    </div>
+    }
+</div>

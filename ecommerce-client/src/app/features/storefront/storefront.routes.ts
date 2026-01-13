@@ -67,4 +67,11 @@ export const storefrontRoutes: Routes = [
                 title: 'Brand | LUXE Store'
             },
             {
-      
+                path: 'new-arrivals',
+                loadComponent: () => import('./pages/new-arrivals/new-arrivals.component')
+                    .then(m => m.NewArrivalsComponent),
+                title: 'New Arrivals | LUXE Store'
+            }
+        ]
+    }
+];

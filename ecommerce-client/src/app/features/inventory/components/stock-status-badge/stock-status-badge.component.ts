@@ -6,12 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-stock-status-badge',
     standalone: true,
     imports: [CommonModule, TranslateModule],
-    template: `
-        <span [class]="badgeClass()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold">
-            <span [class]="dotClass()" class="w-1.5 h-1.5 rounded-full"></span>
-            {{ label() | translate }}
-        </span>
-    `
+    templateUrl: './stock-status-badge.component.html',
+    styleUrls: ['./stock-status-badge.component.scss']
 })
 export class StockStatusBadgeComponent {
     // Inputs: Expects either numbers to calculate status or direct boolean flags
@@ -55,4 +51,3 @@ export class StockStatusBadgeComponent {
         }
     });
 }
-

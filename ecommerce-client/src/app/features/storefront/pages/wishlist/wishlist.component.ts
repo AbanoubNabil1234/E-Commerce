@@ -2,6 +2,10 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
+// ============================================
+// INTERFACES
+// ============================================
+
 interface WishlistItem {
   id: number;
   name: string;
@@ -12,112 +16,23 @@ interface WishlistItem {
   inStock: boolean;
 }
 
+// ============================================
+// COMPONENT
+// ============================================
+
 @Component({
   selector: 'app-wishlist',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-    <div class="bg-gray-50 dark:bg-dark-bg min-h-screen">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-          <div class="flex items-center gap-3">
-            <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-            </svg>
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Wishlist</h1>
-            <span class="px-3 py-1 bg-gray-100 dark:bg-dark-surface text-gray-600 dark:text-gray-400 text-sm font-medium rounded-full">
-              {{ wishlistItems().length }} items
-            </span>
-          </div>
-          <button class="btn-glass text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-dark-border">
-            <svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-            </svg>
-            Share Wishlist
-          </button>
-        </div>
-
-        @if (wishlistItems().length > 0) {
-          <!-- Wishlist Grid -->
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
-            @for (item of wishlistItems(); track item.id) {
-              <div class="bg-white dark:bg-dark-card rounded-xl overflow-hidden border border-gray-100 dark:border-dark-border group">
-                <!-- Image -->
-                <div class="relative aspect-square overflow-hidden bg-gray-50 dark:bg-dark-surface">
-                  <a [routerLink]="['/store/product', item.id]">
-                    <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  </a>
-                  <!-- Remove Button -->
-                  <button 
-                    (click)="removeFromWishlist(item.id)"
-                    class="absolute top-3 end-3 p-2 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-full text-red-500 shadow-sm hover:bg-red-50 transition-colors"
-                  >
-                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                  </button>
-                  @if (!item.inStock) {
-                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span class="px-3 py-1 bg-white text-gray-900 text-sm font-medium rounded-full">Out of Stock</span>
-                    </div>
-                  }
-                </div>
-                
-                <!-- Details -->
-                <div class="p-4">
-                  <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">{{ item.brand }}</p>
-                  <a [routerLink]="['/store/product', item.id]" class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2 hover:text-primary-600 mb-2 block">
-                    {{ item.name }}
-                  </a>
-                  <div class="flex items-center gap-2 mb-3">
-                    <span class="font-bold text-gray-900 dark:text-white">\${{ item.price.toFixed(2) }}</span>
-                    @if (item.originalPrice) {
-                      <span class="text-sm text-gray-400 line-through">\${{ item.originalPrice.toFixed(2) }}</span>
-                    }
-                  </div>
-                  <button 
-                    (click)="addToCart(item.id)"
-                    [disabled]="!item.inStock"
-                    class="w-full py-2.5 text-sm font-medium rounded-lg transition-all"
-                    [class]="item.inStock 
-                      ? 'bg-primary-600 text-white hover:bg-primary-700' 
-                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'"
-                  >
-                    {{ item.inStock ? 'Add to Cart' : 'Notify Me' }}
-                  </button>
-                  <div class="flex items-center justify-center gap-4 mt-3 text-xs text-gray-500">
-                    <button (click)="moveToCart(item.id)" class="hover:text-primary-600 transition-colors">Move to Cart</button>
-                    <span>|</span>
-                    <button (click)="removeFromWishlist(item.id)" class="hover:text-red-500 transition-colors">Remove</button>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        } @else {
-          <!-- Empty State -->
-          <div class="text-center py-16">
-            <div class="w-24 h-24 mx-auto bg-gray-100 dark:bg-dark-surface rounded-full flex items-center justify-center mb-6">
-              <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-              </svg>
-            </div>
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Your wishlist is empty</h2>
-            <p class="text-gray-500 mb-6">Start adding items you love!</p>
-            <a routerLink="/store" class="btn-cta">
-              Explore Products
-            </a>
-          </div>
-        }
-      </div>
-
-      <!-- Spacer for mobile nav -->
-      <div class="h-24 lg:hidden"></div>
-    </div>
-  `
+  templateUrl: './wishlist.component.html',
+  styleUrls: ['./wishlist.component.scss']
 })
 export class WishlistComponent {
+
+  // ============================================
+  // PUBLIC SIGNALS - Wishlist Items
+  // ============================================
+
   wishlistItems = signal<WishlistItem[]>([
     {
       id: 1,
@@ -170,6 +85,10 @@ export class WishlistComponent {
       inStock: true
     }
   ]);
+
+  // ============================================
+  // PUBLIC METHODS
+  // ============================================
 
   removeFromWishlist(itemId: number): void {
     this.wishlistItems.update(items => items.filter(item => item.id !== itemId));

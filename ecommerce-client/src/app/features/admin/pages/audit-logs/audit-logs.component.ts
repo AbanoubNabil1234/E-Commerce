@@ -1,2 +1,13 @@
-// audit-logs.component.ts - Audit Trail
-// TODO: Implement audit log viewer
+// audit-logs.component.ts - Admin Audit Logs
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+
+@Component({
+    selector: 'app-admin-audit-logs',
+    standalone: true,
+    imports: [CommonModule, TranslateModule],
+    templateUrl: './audit-logs.component.html',
+    styleUrls: ['./audit-logs.component.scss']
+})
+export class AuditLogsComponent { }

@@ -1,0 +1,13 @@
+/* ============================================== */
+/* NEW ARRIVALS COMPONENT STYLES */
+/* ============================================== */
+
+/* Scrollbar hide for horizontal scroll */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

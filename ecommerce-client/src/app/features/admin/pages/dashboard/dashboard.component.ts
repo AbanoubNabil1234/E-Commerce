@@ -1,2 +1,13 @@
 // dashboard.component.ts - Admin Dashboard
-// TODO: Implement admin dashboard with metrics
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+
+@Component({
+    selector: 'app-admin-dashboard',
+    standalone: true,
+    imports: [CommonModule, TranslateModule],
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss']
+})
+export class DashboardComponent { }
