@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/orders/orders.routes.ts"],
+  "sourcesContent": ["import { Routes } from '@angular/router';\r\n\r\nexport const ordersRoutes: Routes = [\r\n    {\r\n        path: '',\r\n        loadComponent: () => import('./pages/order-list/order-list.component')\r\n            .then(m => m.OrderListComponent),\r\n        title: 'Orders'\r\n    },\r\n    {\r\n        path: 'create',\r\n        loadComponent: () => import('./pages/order-create/order-create.component')\r\n            .then(m => m.OrderCreateComponent),\r\n        title: 'Create Order'\r\n    },\r\n    {\r\n        path: ':id',\r\n        loadComponent: () => import('./pages/order-detail/order-detail.component')\r\n            .then(m => m.OrderDetailComponent),\r\n        title: 'Order Details'\r\n    }\r\n];\r\n"],
+  "mappings": ";;;AAEO,IAAM,eAAuB;EAChC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAyC,EAChE,KAAK,OAAK,EAAE,kBAAkB;IACnC,OAAO;;EAEX;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAA6C,EACpE,KAAK,OAAK,EAAE,oBAAoB;IACrC,OAAO;;EAEX;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAA6C,EACpE,KAAK,OAAK,EAAE,oBAAoB;IACrC,OAAO;;;",
+  "names": []
+}

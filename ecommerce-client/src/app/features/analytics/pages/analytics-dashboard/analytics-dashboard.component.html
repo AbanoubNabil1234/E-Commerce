@@ -1,0 +1,310 @@
+<!-- Analytics Dashboard - Professional Design -->
+<div class="analytics-dashboard">
+    <!-- Header -->
+    <header class="page-header">
+        <h1 class="page-title">Analytics Dashboard</h1>
+
+        <div class="filters-section">
+            <div class="filter-group">
+                <button class="filter-btn" [class.active]="selectedPeriod === 'today'" (click)="setPeriod('today')">
+                    Today
+                </button>
+                <button class="filter-btn" [class.active]="selectedPeriod === 'week'" (click)="setPeriod('week')">
+                    This Week
+                </button>
+                <button class="filter-btn" [class.active]="selectedPeriod === 'month'" (click)="setPeriod('month')">
+                    This Month
+                </button>
+                <button class="filter-btn" [class.active]="selectedPeriod === 'year'" (click)="setPeriod('year')">
+                    This Year
+                </button>
+            </div>
+        </div>
+    </header>
+
+    @if (loading()) {
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading analytics...</span>
+    </div>
+    } @else {
+    <!-- KPI Cards -->
+    <section class="kpi-section">
+        <!-- Total Revenue -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                @if (overview()?.revenueGrowth && overview()!.revenueGrowth !== 0) {
+                <span class="kpi-trend" [class.up]="overview()!.revenueGrowth > 0"
+                    [class.down]="overview()!.revenueGrowth < 0">
+                    <i class="fas" [class.fa-arrow-up]="overview()!.revenueGrowth > 0"
+                        [class.fa-arrow-down]="overview()!.revenueGrowth < 0"></i>
+                    {{ overview()!.revenueGrowth > 0 ? '+' : '' }}{{ overview()!.revenueGrowth | number:'1.1-1' }}%
+                </span>
+                }
+            </div>
+            <p class="kpi-label">Total Revenue</p>
+            <h2 class="kpi-value">{{ formatCurrency(overview()?.totalRevenue || 0) }}</h2>
+        </div>
+
+        <!-- Total Orders -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon orders">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                @if (overview()?.ordersGrowth && overview()!.ordersGrowth !== 0) {
+                <span class="kpi-trend" [class.up]="overview()!.ordersGrowth > 0"
+                    [class.down]="overview()!.ordersGrowth < 0">
+                    <i class="fas" [class.fa-arrow-up]="overview()!.ordersGrowth > 0"
+                        [class.fa-arrow-down]="overview()!.ordersGrowth < 0"></i>
+                    {{ overview()!.ordersGrowth > 0 ? '+' : '' }}{{ overview()!.ordersGrowth | number:'1.1-1' }}%
+                </span>
+                }
+            </div>
+            <p class="kpi-label">Total Orders</p>
+            <h2 class="kpi-value">{{ formatNumber(overview()?.totalOrders || 0) }}</h2>
+        </div>
+
+        <!-- Active Shipments -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon shipments">
+                    <i class="fas fa-truck"></i>
+                </div>
+            </div>
+            <p class="kpi-label">Active Shipments</p>
+            <h2 class="kpi-value">{{ formatNumber(overview()?.activeShipments || 0) }}</h2>
+        </div>
+
+        <!-- Low Stock Alert -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon lowstock">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
+            <p class="kpi-label">Low Stock Alert</p>
+            <h2 class="kpi-value">{{ formatNumber(overview()?.lowStockProducts || 0) }}</h2>
+        </div>
+
+        <!-- Delivered -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon delivered">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+            <p class="kpi-label">Delivered</p>
+            <h2 class="kpi-value">{{ formatNumber(overview()?.deliveredOrders || 0) }}</h2>
+        </div>
+
+        <!-- Average Order Value -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon customers">
+                    <i class="fas fa-wallet"></i>
+                </div>
+            </div>
+            <p class="kpi-label">Average Order Value</p>
+            <h2 class="kpi-value">{{ formatCurrency(overview()?.averageOrderValue || 0) }}</h2>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-grid">
+        <!-- Sales Performance -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Sales Performance</h3>
+                <div class="chart-actions">
+                    <button class="chart-action-btn" [class.active]="chartView === 'daily'"
+                        (click)="setChartView('daily')">Daily</button>
+                    <button class="chart-action-btn" [class.active]="chartView === 'weekly'"
+                        (click)="setChartView('weekly')">Weekly</button>
+                    <button class="chart-action-btn" [class.active]="chartView === 'monthly'"
+                        (click)="setChartView('monthly')">Monthly</button>
+                </div>
+            </div>
+            <div class="chart-container simple-bars">
+                @for (point of sales()?.revenueOverTime || []; track point.date) {
+                <div class="bar-item">
+                    <div class="bar"
+                        [style.height.%]="revenueChartData().maxValue > 0 ? (point.value / revenueChartData().maxValue) * 100 : 5">
+                    </div>
+                    <span class="bar-label">{{ point.label }}</span>
+                </div>
+                }
+                @if (!sales()?.revenueOverTime?.length) {
+                @for (day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; track day) {
+                <div class="bar-item">
+                    <div class="bar" style="height: 20%"></div>
+                    <span class="bar-label">{{ day }}</span>
+                </div>
+                }
+                }
+            </div>
+        </div>
+
+        <!-- Order Status -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Order Status</h3>
+            </div>
+            <div class="status-list">
+                @for (status of orderStatusData(); track status.category) {
+                <div class="status-item">
+                    <div class="status-info">
+                        <span class="status-dot" [style.background]="status.color"></span>
+                        <span class="status-name">{{ status.category }}</span>
+                    </div>
+                    <div class="status-bar-container">
+                        <div class="status-bar" [style.width.%]="status.percentage" [style.background]="status.color">
+                            {{ status.value }}
+                        </div>
+                    </div>
+                    <span class="status-value">{{ status.percentage | number:'1.0-0' }}%</span>
+                </div>
+                }
+                @if (!orderStatusData().length) {
+                <div class="status-item">
+                    <div class="status-info">
+                        <span class="status-dot" style="background: #f59e0b"></span>
+                        <span class="status-name">Pending</span>
+                    </div>
+                    <div class="status-bar-container">
+                        <div class="status-bar" style="width: 40%; background: #f59e0b">0</div>
+                    </div>
+                    <span class="status-value">0%</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-info">
+                        <span class="status-dot" style="background: #3b82f6"></span>
+                        <span class="status-name">Processing</span>
+                    </div>
+                    <div class="status-bar-container">
+                        <div class="status-bar" style="width: 30%; background: #3b82f6">0</div>
+                    </div>
+                    <span class="status-value">0%</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-info">
+                        <span class="status-dot" style="background: #06b6d4"></span>
+                        <span class="status-name">Shipped</span>
+                    </div>
+                    <div class="status-bar-container">
+                        <div class="status-bar" style="width: 20%; background: #06b6d4">0</div>
+                    </div>
+                    <span class="status-value">0%</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-info">
+                        <span class="status-dot" style="background: #10b981"></span>
+                        <span class="status-name">Delivered</span>
+                    </div>
+                    <div class="status-bar-container">
+                        <div class="status-bar" style="width: 60%; background: #10b981">0</div>
+                    </div>
+                    <span class="status-value">0%</span>
+                </div>
+                }
+            </div>
+            <div class="donut-total">
+                <span class="donut-value">{{ formatNumber(overview()?.totalOrders || 0) }}</span>
+                <span class="donut-label">Total Orders</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <!-- Top Selling Products -->
+        <div class="products-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Top Selling Products</h3>
+            </div>
+            <div class="table-header">
+                <span>Rank</span>
+                <span>Product</span>
+                <span></span>
+                <span>SKU</span>
+                <span>Qty Sold</span>
+                <span>Revenue</span>
+            </div>
+            <ul class="product-list">
+                @for (product of sales()?.bestSellingProducts?.slice(0, 4); track product.productId; let i = $index) {
+                <li class="product-item">
+                    <span class="product-rank">{{ i + 1 }}</span>
+                    <img [src]="product.imageUrl || 'assets/images/placeholder.png'" [alt]="product.productName"
+                        class="product-image" loading="lazy">
+                    <div class="product-info">
+                        <h4 class="product-name">{{ product.productName || 'Product ' + (i+1) }}</h4>
+                    </div>
+                    <span class="product-sku">{{ product.sku }}</span>
+                    <span class="product-sold">{{ product.quantitySold }}</span>
+                    <span class="product-revenue">{{ formatCurrency(product.revenue) }}</span>
+                </li>
+                } @empty {
+                <li class="product-item empty">No data available</li>
+                }
+            </ul>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="products-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Low Stock Alerts</h3>
+            </div>
+            <ul class="product-list">
+                @for (product of inventory()?.lowStockProducts?.slice(0, 4); track product.productId) {
+                <li class="low-stock-item">
+                    <img [src]="product.imageUrl || 'assets/images/placeholder.png'" [alt]="product.productName"
+                        class="product-image" loading="lazy">
+                    <div class="product-info">
+                        <h4 class="product-name">{{ product.productName }}</h4>
+                    </div>
+                    <span class="product-sku">{{ product.warehouseName }}</span>
+                    <div class="stock-status">
+                        <span class="stock-badge">{{ product.currentStock | number }} / {{ product.reorderLevel | number
+                            }}</span>
+                        <div class="stock-progress">
+                            <div class="stock-progress-bar"
+                                [class]="getStockLevel(product.currentStock, product.reorderLevel)"
+                                [style.width.%]="product.reorderLevel > 0 ? (product.currentStock / product.reorderLevel) * 100 : 0">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                } @empty {
+                <li class="product-item empty">All stock levels healthy</li>
+                }
+            </ul>
+        </div>
+    </section>
+
+    <!-- Activity Feed -->
+    <section class="activity-section">
+        <div class="chart-header">
+            <h3 class="chart-title">Activity Feed</h3>
+        </div>
+        <ul class="activity-list">
+            @for (activity of recentActivities(); track activity.id) {
+            <li class="activity-item">
+                <div class="activity-icon" [class]="activity.type">
+                    <i class="fas" [class]="activity.icon"></i>
+                </div>
+                <div class="activity-content">
+                    <span class="activity-title">{{ activity.title }}</span>
+                    <p class="activity-description">{{ activity.description }}</p>
+                </div>
+                <span class="activity-time">{{ activity.time | date:'shortTime' }}</span>
+            </li>
+            } @empty {
+            <li class="activity-item empty">No recent activity</li>
+            }
+        </ul>
+    </section>
+    }
+</div>

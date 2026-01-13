@@ -1,0 +1,66 @@
+<!-- Roles List Component -->
+<div class="roles-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Role Management</h1>
+            <p class="page-subtitle">Configure system roles and access permissions</p>
+        </div>
+        <button class="btn-primary" routerLink="create">
+            <i class="fas fa-plus"></i>
+            Create New Role
+        </button>
+    </header>
+
+    @if (loading()) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Loading roles...</span>
+    </div>
+    } @else {
+    <div class="roles-grid">
+        @for (role of roles(); track role.id) {
+        <div class="role-card">
+            <div class="card-actions">
+                <button class="action-btn" title="Edit" [routerLink]="[role.id, 'permissions']">
+                    <i class="fas fa-pen"></i>
+                </button>
+                <button class="action-btn delete" title="Delete" (click)="deleteRole(role)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+
+            <div class="role-icon" [style.background-color]="getRoleIcon(role.name).color + '20'"
+                [style.color]="getRoleIcon(role.name).color">
+                <i [class]="getRoleIcon(role.name).icon"></i>
+            </div>
+
+            <h3 class="role-name">{{ role.name }}</h3>
+            <p class="role-description">{{ role.description || 'No description provided' }}</p>
+
+            <div class="role-stats">
+                <div class="stat">
+                    <i class="fas fa-users"></i>
+                    <span>{{ role.usersCount }} users</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-key"></i>
+                    <span>{{ role.permissionsCount }} permissions</span>
+                </div>
+            </div>
+
+            <a class="edit-link" [routerLink]="[role.id, 'permissions']">
+                Edit Permissions
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        } @empty {
+        <div class="empty-state">
+            <i class="fas fa-user-tag"></i>
+            <p>No roles found</p>
+            <span>Create a new role to get started</span>
+        </div>
+        }
+    </div>
+    }
+</div>

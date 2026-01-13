@@ -1,0 +1,351 @@
+<!-- Orders List - Desktop Table / Mobile Cards -->
+<div class="min-h-screen bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- Header -->
+        <div class="mb-6">
+            <!-- Breadcrumb -->
+            <nav class="text-sm text-slate-500 mb-2">
+                <a routerLink="/dashboard" class="hover:text-indigo-600">{{ 'NAV.DASHBOARD' | translate }}</a>
+                <span class="mx-2">›</span>
+                <span class="text-slate-700">{{ 'ORDERS.TITLE' | translate }}</span>
+            </nav>
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <h1 class="text-2xl font-bold text-slate-900">{{ 'ORDERS.TITLE' | translate }}</h1>
+                <a routerLink="/orders/create"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {{ 'ORDERS.CREATE_ORDER' | translate }}
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-6">
+            <div class="flex flex-col lg:flex-row gap-4">
+                <!-- Search -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" [value]="searchTerm()" (input)="onSearchChange($any($event.target).value)"
+                            [placeholder]="'ORDERS.SEARCH_PLACEHOLDER' | translate"
+                            class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="w-full lg:w-48">
+                    <select [value]="selectedStatus()" (change)="onStatusChange($any($event.target).value)"
+                        class="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option *ngFor="let status of statusOptions" [value]="status.value">
+                            {{ status.label | translate }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Warehouse Filter -->
+                <div class="w-full lg:w-48">
+                    <select [value]="selectedWarehouseId() || ''"
+                        (change)="onWarehouseChange($any($event.target).value ? +$any($event.target).value : null)"
+                        class="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="">{{ 'ORDERS.ALL_WAREHOUSES' | translate }}</option>
+                        <option *ngFor="let wh of warehouses()" [value]="wh.id">{{ wh.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Date Range -->
+                <div class="flex gap-2">
+                    <input type="date" [value]="fromDate()"
+                        (change)="fromDate.set($any($event.target).value); onDateRangeChange()"
+                        class="px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <input type="date" [value]="toDate()"
+                        (change)="toDate.set($any($event.target).value); onDateRangeChange()"
+                        class="px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <!-- Clear Filters -->
+                <button *ngIf="hasActiveFilters()" (click)="clearFilters()"
+                    class="text-indigo-600 hover:text-indigo-800 font-medium whitespace-nowrap">
+                    {{ 'COMMON.CLEAR_FILTERS' | translate }}
+                </button>
+            </div>
+
+            <!-- Mobile Status Chips -->
+            <div class="flex gap-2 mt-4 overflow-x-auto pb-2 lg:hidden">
+                <button *ngFor="let status of statusOptions" (click)="onStatusChange(status.value)"
+                    [class]="selectedStatus() === status.value 
+                            ? 'px-4 py-2 rounded-full text-sm font-medium bg-indigo-600 text-white whitespace-nowrap'
+                            : 'px-4 py-2 rounded-full text-sm font-medium bg-white border border-slate-300 text-slate-700 whitespace-nowrap'">
+                    {{ status.label | translate }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading()" class="space-y-4">
+            <div *ngFor="let i of [1,2,3,4,5]" class="bg-white rounded-xl p-4 animate-pulse">
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 bg-slate-200 rounded-lg"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-slate-200 rounded w-1/4"></div>
+                        <div class="h-3 bg-slate-200 rounded w-1/3"></div>
+                    </div>
+                    <div class="h-6 bg-slate-200 rounded-full w-20"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading() && filteredOrders().length === 0"
+            class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900 mb-2">{{ 'ORDERS.EMPTY_TITLE' | translate }}</h3>
+            <p class="text-slate-500 mb-6">{{ 'ORDERS.EMPTY_DESCRIPTION' | translate }}</p>
+            <a routerLink="/orders/create"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                {{ 'ORDERS.CREATE_FIRST' | translate }}
+            </a>
+        </div>
+
+        <!-- Desktop Table View -->
+        <div *ngIf="!loading() && filteredOrders().length > 0"
+            class="hidden lg:block bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{
+                            'ORDERS.TABLE.ORDER' | translate }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{
+                            'ORDERS.TABLE.CUSTOMER' | translate }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{
+                            'ORDERS.TABLE.WAREHOUSE' | translate }}</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'ORDERS.TABLE.ITEMS' | translate }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'ORDERS.TABLE.TOTAL' | translate }}</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'ORDERS.TABLE.STATUS' | translate }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{{
+                            'ORDERS.TABLE.DATE' | translate }}</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'ORDERS.TABLE.ACTIONS' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    <tr *ngFor="let order of filteredOrders()" class="hover:bg-slate-50 transition-colors">
+                        <!-- Order Number -->
+                        <td class="px-6 py-4">
+                            <a [routerLink]="['/orders', order.id]"
+                                class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                #{{ order.orderNumber }}
+                            </a>
+                        </td>
+
+                        <!-- Customer -->
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-slate-900">{{ order.customerName || 'Guest' }}</div>
+                            <div class="text-sm text-slate-500">{{ order.customerId }}</div>
+                        </td>
+
+                        <!-- Warehouse -->
+                        <td class="px-6 py-4 text-slate-600">
+                            {{ order.warehouseName || '-' }}
+                        </td>
+
+                        <!-- Items Count -->
+                        <td class="px-6 py-4 text-center text-slate-600">
+                            {{ order.itemCount }}
+                        </td>
+
+                        <!-- Total -->
+                        <td class="px-6 py-4 text-right font-semibold text-slate-900">
+                            {{ formatCurrency(order.totalAmount, order.currency) }}
+                        </td>
+
+                        <!-- Status -->
+                        <td class="px-6 py-4 text-center">
+                            <span
+                                [class]="'inline-flex px-3 py-1 text-xs font-semibold rounded-full ' + getStatusClass(order.orderStatus)">
+                                {{ 'ORDERS.STATUS.' + order.orderStatus.toUpperCase() | translate }}
+                            </span>
+                        </td>
+
+                        <!-- Date -->
+                        <td class="px-6 py-4 text-slate-500 text-sm">
+                            {{ formatDate(order.createdAt) }}
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-center gap-2">
+                                <a [routerLink]="['/orders', order.id]"
+                                    class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                    [title]="'COMMON.VIEW' | translate">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </a>
+
+                                <!-- More Actions Menu -->
+                                <div class="relative">
+                                    <button (click)="toggleMenu(order.id)"
+                                        class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                        </svg>
+                                    </button>
+
+                                    <div *ngIf="activeMenuOrderId() === order.id"
+                                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-10">
+                                        <a [routerLink]="['/orders', order.id]"
+                                            class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                                            {{ 'ORDERS.VIEW_ORDER' | translate }}
+                                        </a>
+                                        <button *ngIf="canConfirm(order)" (click)="confirmOrder(order)"
+                                            class="w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50">
+                                            {{ 'ORDERS.CONFIRM_ORDER' | translate }}
+                                        </button>
+                                        <button *ngIf="canShip(order)" (click)="shipOrder(order)"
+                                            class="w-full text-left px-4 py-2 text-sm text-purple-600 hover:bg-purple-50">
+                                            {{ 'ORDERS.SHIP_ORDER' | translate }}
+                                        </button>
+                                        <button *ngIf="canCancel(order)" (click)="cancelOrder(order)"
+                                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                            {{ 'ORDERS.CANCEL_ORDER' | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+                <div class="text-sm text-slate-500">
+                    {{ 'COMMON.SHOWING' | translate }} {{ (pageNumber() - 1) * pageSize() + 1 }} - {{ pageNumber() *
+                    pageSize() }}
+                    {{ 'COMMON.OF' | translate }} {{ filteredOrders().length }} {{ 'ORDERS.ORDERS' | translate }}
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-slate-500">{{ 'COMMON.ROWS_PER_PAGE' | translate }}:</span>
+                        <select [value]="pageSize()" (change)="onPageSizeChange(+$any($event.target).value)"
+                            class="border border-slate-200 rounded px-2 py-1 text-sm">
+                            <option [value]="10">10</option>
+                            <option [value]="20">20</option>
+                            <option [value]="50">50</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button (click)="onPageChange(pageNumber() - 1)" [disabled]="pageNumber() === 1"
+                            class="p-2 rounded-lg border border-slate-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <span class="px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium">{{ pageNumber()
+                            }}</span>
+                        <button (click)="onPageChange(pageNumber() + 1)"
+                            class="p-2 rounded-lg border border-slate-200 hover:bg-slate-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div *ngIf="!loading() && filteredOrders().length > 0" class="lg:hidden space-y-4">
+            <div *ngFor="let order of filteredOrders()"
+                class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <!-- Card Header -->
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div [class]="'w-10 h-10 rounded-lg flex items-center justify-center ' + 
+                            (order.orderStatus === 'Draft' ? 'bg-amber-100' : 
+                             order.orderStatus === 'Shipped' ? 'bg-purple-100' : 
+                             order.orderStatus === 'Delivered' ? 'bg-green-100' : 'bg-indigo-100')">
+                            <svg class="w-5 h-5"
+                                [class]="order.orderStatus === 'Draft' ? 'text-amber-600' : 
+                                                          order.orderStatus === 'Shipped' ? 'text-purple-600' : 
+                                                          order.orderStatus === 'Delivered' ? 'text-green-600' : 'text-indigo-600'"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-slate-900">#{{ order.orderNumber }}</div>
+                            <div class="text-xs text-slate-500">{{ getRelativeTime(order.createdAt) }}</div>
+                        </div>
+                    </div>
+                    <span [class]="'px-3 py-1 text-xs font-semibold rounded-full ' + getStatusClass(order.orderStatus)">
+                        {{ 'ORDERS.STATUS.' + order.orderStatus.toUpperCase() | translate }}
+                    </span>
+                </div>
+
+                <!-- Card Details -->
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">{{ 'ORDERS.CUSTOMER' | translate }}:</span>
+                        <span class="text-slate-900 font-medium">{{ order.customerName || 'Guest' }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">{{ 'ORDERS.WAREHOUSE' | translate }}:</span>
+                        <span class="text-slate-900">{{ order.warehouseName || '-' }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">{{ 'ORDERS.TOTAL' | translate }}:</span>
+                        <span class="text-indigo-600 font-semibold">{{ formatCurrency(order.totalAmount, order.currency)
+                            }}</span>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <a *ngIf="order.orderStatus !== 'Draft'" [routerLink]="['/orders', order.id]"
+                    class="block w-full py-2.5 text-center bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    {{ 'ORDERS.VIEW_DETAILS' | translate }}
+                </a>
+                <a *ngIf="order.orderStatus === 'Draft'" [routerLink]="['/orders', order.id, 'edit']"
+                    class="block w-full py-2.5 text-center bg-white border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors">
+                    {{ 'ORDERS.EDIT_DRAFT' | translate }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div *ngIf="showToast" [class]="'fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50 ' + 
+              (toastType === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white')">
+    <span>{{ toastMessage }}</span>
+    <button (click)="showToast = false" class="hover:opacity-80">×</button>
+</div>
+
+<!-- Click Outside Handler for Menu -->
+<div *ngIf="activeMenuOrderId()" (click)="closeMenu()" class="fixed inset-0 z-0"></div>

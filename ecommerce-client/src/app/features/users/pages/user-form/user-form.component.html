@@ -1,0 +1,158 @@
+<!-- User Form Component (Create/Edit) -->
+<div class="user-form-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <nav class="breadcrumb">
+            <a routerLink="/users">User Management</a>
+            <i class="fas fa-chevron-right"></i>
+            <span class="current">{{ pageTitle() }}</span>
+        </nav>
+    </header>
+
+    @if (loading()) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <span>Loading user data...</span>
+    </div>
+    } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <div class="header-info">
+                <h1 class="form-title">{{ pageTitle() }}</h1>
+                @if (isEditMode() && user()) {
+                <p class="user-meta">
+                    ID: #{{ user()?.id?.substring(0, 8) }} •
+                    Last Login: {{ user()?.lastLoginAt ? (user()?.lastLoginAt | date:'medium') : 'Never' }}
+                </p>
+                }
+            </div>
+            <div class="status-toggle">
+                <span class="status-label">User Status</span>
+                <label class="toggle">
+                    <input type="checkbox" formControlName="isActive">
+                    <span class="slider"></span>
+                    <span class="toggle-text">{{ form.value.isActive ? 'Active' : 'Inactive' }}</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Account Details Section -->
+        <section class="form-section">
+            <div class="section-header">
+                <i class="fas fa-user"></i>
+                <h2>Account Details</h2>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" formControlName="firstName" placeholder="Enter first name"
+                        [class.invalid]="isFieldInvalid('firstName')">
+                    @if (isFieldInvalid('firstName')) {
+                    <span class="error-message">{{ getFieldError('firstName') }}</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" formControlName="lastName" placeholder="Enter last name"
+                        [class.invalid]="isFieldInvalid('lastName')">
+                    @if (isFieldInvalid('lastName')) {
+                    <span class="error-message">{{ getFieldError('lastName') }}</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" formControlName="email" placeholder="user@company.com"
+                        [class.invalid]="isFieldInvalid('email')">
+                    @if (isFieldInvalid('email')) {
+                    <span class="error-message">{{ getFieldError('email') }}</span>
+                    }
+                </div>
+
+                @if (!isEditMode()) {
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" formControlName="password" placeholder="Minimum 8 characters"
+                        [class.invalid]="isFieldInvalid('password')">
+                    @if (isFieldInvalid('password')) {
+                    <span class="error-message">{{ getFieldError('password') }}</span>
+                    }
+                </div>
+                }
+
+                <div class="form-group">
+                    <label for="role">Role Selection</label>
+                    <div class="select-wrapper">
+                        <select id="role" formControlName="role" [class.invalid]="isFieldInvalid('role')">
+                            <option value="">Select a role</option>
+                            @for (role of roles(); track role.id) {
+                            <option [value]="role.name">{{ role.name }}</option>
+                            }
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    @if (isFieldInvalid('role')) {
+                    <span class="error-message">{{ getFieldError('role') }}</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="warehouseId">Warehouse Assignment</label>
+                    <div class="select-wrapper">
+                        <select id="warehouseId" formControlName="warehouseId">
+                            <option value="">No warehouse assigned</option>
+                            <option value="main">Main Distribution Hub</option>
+                            <option value="secondary">Secondary Warehouse</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Section (Edit Mode Only) -->
+        @if (isEditMode()) {
+        <section class="form-section security-section">
+            <div class="section-header">
+                <i class="fas fa-lock"></i>
+                <h2>Security & Access</h2>
+            </div>
+
+            <div class="security-action">
+                <div class="action-info">
+                    <h3>Reset User Password</h3>
+                    <p>Set a new password for this user account.</p>
+                </div>
+                <button type="button" class="btn-outline" (click)="onResetPassword()">
+                    Reset Password
+                </button>
+            </div>
+        </section>
+        }
+
+        <!-- Form Actions -->
+        <footer class="form-actions">
+            <button type="button" class="btn-cancel" (click)="onCancel()">
+                Cancel
+            </button>
+            <button type="submit" class="btn-save" [disabled]="saving()">
+                @if (saving()) {
+                <span class="spinner-sm"></span>
+                Saving...
+                } @else {
+                <i class="fas fa-check"></i>
+                Save Changes
+                }
+            </button>
+        </footer>
+    </form>
+    }
+
+    <!-- Footer -->
+    <div class="page-footer">
+        <span>Enterprise ERP v4.2 stable - Authorized access only. All actions are logged.</span>
+    </div>
+</div>

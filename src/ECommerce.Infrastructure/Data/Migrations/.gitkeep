@@ -1,0 +1,2 @@
+# EF Core Migrations Directory
+# Run: dotnet ef migrations add InitialCreate -p src/ECommerce.Infrastructure -s src/ECommerce.API

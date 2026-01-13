@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;0baddcd806fcc1257c32b1afce1edb4d4fb492bcfe2c9b56f1ee477b05e6be4a;D:/fullstack project/e-com/ecommerce-client/src/app/features/warehouses/components/status-confirm-dialog/status-confirm-dialog.component.ts"],
+  "sourcesContent": ["\n        :host { display: block; }\n    "],
+  "mappings": ";AACQ;AAAQ,WAAS;AAAO;",
+  "names": []
+}

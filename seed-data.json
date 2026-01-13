@@ -1,0 +1,1299 @@
+{
+    "brands": [
+        {
+            "id": 1,
+            "nameEN": "Sony",
+            "nameAR": "سوني",
+            "slug": "sony",
+            "descriptionEN": "Japanese multinational corporation specializing in electronics, gaming, and entertainment.",
+            "descriptionAR": "شركة يابانية متعددة الجنسيات متخصصة في الإلكترونيات والألعاب والترفيه.",
+            "logoUrl": "/assets/brands/sony.png",
+            "isActive": true
+        },
+        {
+            "id": 2,
+            "nameEN": "Samsung",
+            "nameAR": "سامسونج",
+            "slug": "samsung",
+            "descriptionEN": "South Korean multinational electronics company, world leader in smartphones and displays.",
+            "descriptionAR": "شركة إلكترونيات كورية جنوبية رائدة عالمياً في الهواتف الذكية والشاشات.",
+            "logoUrl": "/assets/brands/samsung.png",
+            "isActive": true
+        },
+        {
+            "id": 3,
+            "nameEN": "Apple",
+            "nameAR": "آبل",
+            "slug": "apple",
+            "descriptionEN": "American technology company known for iPhone, Mac, and innovative consumer electronics.",
+            "descriptionAR": "شركة تكنولوجيا أمريكية معروفة بأجهزة آيفون وماك والإلكترونيات الاستهلاكية المبتكرة.",
+            "logoUrl": "/assets/brands/apple.png",
+            "isActive": true
+        },
+        {
+            "id": 4,
+            "nameEN": "LG",
+            "nameAR": "إل جي",
+            "slug": "lg",
+            "descriptionEN": "South Korean electronics company specializing in home appliances and displays.",
+            "descriptionAR": "شركة إلكترونيات كورية جنوبية متخصصة في الأجهزة المنزلية والشاشات.",
+            "logoUrl": "/assets/brands/lg.png",
+            "isActive": true
+        },
+        {
+            "id": 5,
+            "nameEN": "Dell",
+            "nameAR": "ديل",
+            "slug": "dell",
+            "descriptionEN": "American technology company known for computers and enterprise solutions.",
+            "descriptionAR": "شركة تكنولوجيا أمريكية معروفة بالحواسيب وحلول المؤسسات.",
+            "logoUrl": "/assets/brands/dell.png",
+            "isActive": true
+        },
+        {
+            "id": 6,
+            "nameEN": "IKEA",
+            "nameAR": "ايكيا",
+            "slug": "ikea",
+            "descriptionEN": "Swedish furniture retailer known for modern, affordable home furnishings.",
+            "descriptionAR": "متجر أثاث سويدي معروف بالأثاث المنزلي العصري وبأسعار معقولة.",
+            "logoUrl": "/assets/brands/ikea.png",
+            "isActive": true
+        },
+        {
+            "id": 7,
+            "nameEN": "HP",
+            "nameAR": "إتش بي",
+            "slug": "hp",
+            "descriptionEN": "American multinational information technology company.",
+            "descriptionAR": "شركة أمريكية متعددة الجنسيات لتكنولوجيا المعلومات.",
+            "logoUrl": "/assets/brands/hp.png",
+            "isActive": true
+        },
+        {
+            "id": 8,
+            "nameEN": "Logitech",
+            "nameAR": "لوجيتك",
+            "slug": "logitech",
+            "descriptionEN": "Swiss manufacturer of computer peripherals and accessories.",
+            "descriptionAR": "شركة سويسرية لتصنيع ملحقات وإكسسوارات الكمبيوتر.",
+            "logoUrl": "/assets/brands/logitech.png",
+            "isActive": true
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "nameEN": "Electronics",
+            "nameAR": "إلكترونيات",
+            "slug": "electronics",
+            "parentId": null,
+            "descriptionEN": "Electronic devices and gadgets",
+            "descriptionAR": "الأجهزة والأدوات الإلكترونية"
+        },
+        {
+            "id": 2,
+            "nameEN": "Audio & Sound",
+            "nameAR": "صوتيات",
+            "slug": "audio-sound",
+            "parentId": 1,
+            "descriptionEN": "Headphones, speakers, and audio equipment",
+            "descriptionAR": "سماعات ومكبرات صوت ومعدات صوتية"
+        },
+        {
+            "id": 3,
+            "nameEN": "Mobile Phones",
+            "nameAR": "هواتف ذكية",
+            "slug": "mobile-phones",
+            "parentId": 1,
+            "descriptionEN": "Smartphones and mobile devices",
+            "descriptionAR": "الهواتف الذكية والأجهزة المحمولة"
+        },
+        {
+            "id": 4,
+            "nameEN": "Televisions",
+            "nameAR": "تلفزيونات",
+            "slug": "televisions",
+            "parentId": 1,
+            "descriptionEN": "Smart TVs and displays",
+            "descriptionAR": "التلفزيونات الذكية والشاشات"
+        },
+        {
+            "id": 5,
+            "nameEN": "Computers",
+            "nameAR": "حواسيب",
+            "slug": "computers",
+            "parentId": 1,
+            "descriptionEN": "Laptops, desktops, and computers",
+            "descriptionAR": "أجهزة الكمبيوتر المحمولة والمكتبية"
+        },
+        {
+            "id": 6,
+            "nameEN": "Furniture",
+            "nameAR": "أثاث",
+            "slug": "furniture",
+            "parentId": null,
+            "descriptionEN": "Home and office furniture",
+            "descriptionAR": "أثاث منزلي ومكتبي"
+        },
+        {
+            "id": 7,
+            "nameEN": "Office Furniture",
+            "nameAR": "أثاث مكتبي",
+            "slug": "office-furniture",
+            "parentId": 6,
+            "descriptionEN": "Desks, chairs, and office equipment",
+            "descriptionAR": "مكاتب وكراسي ومعدات مكتبية"
+        },
+        {
+            "id": 8,
+            "nameEN": "Living Room",
+            "nameAR": "غرفة المعيشة",
+            "slug": "living-room",
+            "parentId": 6,
+            "descriptionEN": "Sofas, tables, and living room furniture",
+            "descriptionAR": "أرائك وطاولات وأثاث غرفة المعيشة"
+        },
+        {
+            "id": 9,
+            "nameEN": "Accessories",
+            "nameAR": "إكسسوارات",
+            "slug": "accessories",
+            "parentId": 1,
+            "descriptionEN": "Computer and phone accessories",
+            "descriptionAR": "إكسسوارات الكمبيوتر والهواتف"
+        }
+    ],
+    "products": [
+        {
+            "id": 1,
+            "sku": "SNY-WH1000",
+            "nameEN": "Sony WH-1000XM5 Wireless Headphones",
+            "nameAR": "سماعات سوني WH-1000XM5 لاسلكية",
+            "brandId": 1,
+            "categoryId": 2,
+            "price": 349.99,
+            "costPrice": 220.00,
+            "descriptionEN": "Industry-leading noise canceling with Auto NC Optimizer",
+            "descriptionAR": "عزل ضوضاء رائد في الصناعة مع محسن تلقائي",
+            "weight": 0.25,
+            "dimensions": "25x18x7 cm",
+            "imageUrl": "/assets/products/sony-wh1000xm5.jpg",
+            "isActive": true,
+            "stockQuantity": 150
+        },
+        {
+            "id": 2,
+            "sku": "APL-IPH14PM",
+            "nameEN": "iPhone 14 Pro Max 256GB",
+            "nameAR": "آيفون 14 برو ماكس 256 جيجا",
+            "brandId": 3,
+            "categoryId": 3,
+            "price": 1199.00,
+            "costPrice": 850.00,
+            "descriptionEN": "A16 Bionic chip with Dynamic Island and Always-On display",
+            "descriptionAR": "شريحة A16 بيونيك مع الجزيرة الديناميكية وشاشة تعمل دائماً",
+            "weight": 0.24,
+            "dimensions": "16x7.8x0.8 cm",
+            "imageUrl": "/assets/products/iphone14promax.jpg",
+            "isActive": true,
+            "stockQuantity": 85
+        },
+        {
+            "id": 3,
+            "sku": "SAM-QN65S95B",
+            "nameEN": "Samsung 65\" OLED 4K Smart TV",
+            "nameAR": "تلفزيون سامسونج 65 بوصة OLED 4K ذكي",
+            "brandId": 2,
+            "categoryId": 4,
+            "price": 2499.99,
+            "costPrice": 1800.00,
+            "descriptionEN": "Quantum HDR OLED with Neural Quantum Processor",
+            "descriptionAR": "شاشة OLED كوانتم HDR مع معالج كوانتم العصبي",
+            "weight": 28.5,
+            "dimensions": "145x83x5 cm",
+            "imageUrl": "/assets/products/samsung-qn65.jpg",
+            "isActive": true,
+            "stockQuantity": 25
+        },
+        {
+            "id": 4,
+            "sku": "DEL-XPS15",
+            "nameEN": "Dell XPS 15 Laptop",
+            "nameAR": "لابتوب ديل XPS 15",
+            "brandId": 5,
+            "categoryId": 5,
+            "price": 1899.00,
+            "costPrice": 1350.00,
+            "descriptionEN": "Intel Core i7, 32GB RAM, 1TB SSD, RTX 3050",
+            "descriptionAR": "معالج إنتل كور i7، رام 32 جيجا، SSD 1 تيرا، RTX 3050",
+            "weight": 1.86,
+            "dimensions": "34.4x23x1.8 cm",
+            "imageUrl": "/assets/products/dell-xps15.jpg",
+            "isActive": true,
+            "stockQuantity": 42
+        },
+        {
+            "id": 5,
+            "sku": "IKA-MARKUS",
+            "nameEN": "IKEA MARKUS Office Chair",
+            "nameAR": "كرسي مكتب ايكيا ماركوس",
+            "brandId": 6,
+            "categoryId": 7,
+            "price": 229.00,
+            "costPrice": 120.00,
+            "descriptionEN": "Ergonomic office chair with adjustable headrest",
+            "descriptionAR": "كرسي مكتب مريح مع مسند رأس قابل للتعديل",
+            "weight": 18.5,
+            "dimensions": "62x60x140 cm",
+            "imageUrl": "/assets/products/ikea-markus.jpg",
+            "isActive": true,
+            "stockQuantity": 78
+        },
+        {
+            "id": 6,
+            "sku": "SAM-GS23U",
+            "nameEN": "Samsung Galaxy S23 Ultra",
+            "nameAR": "سامسونج جالكسي S23 الترا",
+            "brandId": 2,
+            "categoryId": 3,
+            "price": 1199.99,
+            "costPrice": 820.00,
+            "descriptionEN": "200MP camera, S Pen included, 5000mAh battery",
+            "descriptionAR": "كاميرا 200 ميجابكسل، قلم S مضمن، بطارية 5000 مللي أمبير",
+            "weight": 0.23,
+            "dimensions": "16.3x7.8x0.9 cm",
+            "imageUrl": "/assets/products/samsung-s23ultra.jpg",
+            "isActive": true,
+            "stockQuantity": 63
+        },
+        {
+            "id": 7,
+            "sku": "LGI-C2OLED55",
+            "nameEN": "LG 55\" C2 OLED evo TV",
+            "nameAR": "تلفزيون إل جي 55 بوصة C2 OLED evo",
+            "brandId": 4,
+            "categoryId": 4,
+            "price": 1799.99,
+            "costPrice": 1200.00,
+            "descriptionEN": "Self-lit OLED pixels with α9 Gen5 AI Processor",
+            "descriptionAR": "بكسلات OLED ذاتية الإضاءة مع معالج α9 الجيل الخامس",
+            "weight": 14.9,
+            "dimensions": "122x71x4.6 cm",
+            "imageUrl": "/assets/products/lg-c2-55.jpg",
+            "isActive": true,
+            "stockQuantity": 34
+        },
+        {
+            "id": 8,
+            "sku": "HP-ENVY17",
+            "nameEN": "HP Envy 17 Laptop",
+            "nameAR": "لابتوب إتش بي إنفي 17",
+            "brandId": 7,
+            "categoryId": 5,
+            "price": 1449.00,
+            "costPrice": 980.00,
+            "descriptionEN": "17.3\" FHD, Intel i7, 16GB RAM, 512GB SSD",
+            "descriptionAR": "شاشة 17.3 بوصة FHD، معالج i7، رام 16 جيجا",
+            "weight": 2.78,
+            "dimensions": "40x26x2 cm",
+            "imageUrl": "/assets/products/hp-envy17.jpg",
+            "isActive": true,
+            "stockQuantity": 28
+        },
+        {
+            "id": 9,
+            "sku": "LOG-MX-KEYS",
+            "nameEN": "Logitech MX Keys Keyboard",
+            "nameAR": "لوحة مفاتيح لوجيتك MX Keys",
+            "brandId": 8,
+            "categoryId": 9,
+            "price": 99.99,
+            "costPrice": 55.00,
+            "descriptionEN": "Advanced wireless illuminated keyboard",
+            "descriptionAR": "لوحة مفاتيح لاسلكية متطورة مضيئة",
+            "weight": 0.81,
+            "dimensions": "43x13x2 cm",
+            "imageUrl": "/assets/products/logitech-mx-keys.jpg",
+            "isActive": true,
+            "stockQuantity": 120
+        },
+        {
+            "id": 10,
+            "sku": "LOG-MX-MASTER",
+            "nameEN": "Logitech MX Master 3S Mouse",
+            "nameAR": "ماوس لوجيتك MX Master 3S",
+            "brandId": 8,
+            "categoryId": 9,
+            "price": 99.99,
+            "costPrice": 52.00,
+            "descriptionEN": "Advanced wireless mouse with 8K DPI sensor",
+            "descriptionAR": "ماوس لاسلكي متطور بمستشعر 8K DPI",
+            "weight": 0.14,
+            "dimensions": "12.4x8.4x5.1 cm",
+            "imageUrl": "/assets/products/logitech-mx-master3s.jpg",
+            "isActive": true,
+            "stockQuantity": 95
+        },
+        {
+            "id": 11,
+            "sku": "IKA-KALLAX",
+            "nameEN": "IKEA KALLAX Shelf Unit",
+            "nameAR": "وحدة رفوف ايكيا كالاكس",
+            "brandId": 6,
+            "categoryId": 8,
+            "price": 169.00,
+            "costPrice": 85.00,
+            "descriptionEN": "Versatile shelving unit, 4x4 compartments, white",
+            "descriptionAR": "وحدة رفوف متعددة الاستخدامات، 4×4 خانات، أبيض",
+            "weight": 42.0,
+            "dimensions": "147x147x39 cm",
+            "imageUrl": "/assets/products/ikea-kallax.jpg",
+            "isActive": true,
+            "stockQuantity": 45
+        },
+        {
+            "id": 12,
+            "sku": "APL-MBA-M2",
+            "nameEN": "MacBook Air M2 13.6\"",
+            "nameAR": "ماك بوك إير M2 13.6 بوصة",
+            "brandId": 3,
+            "categoryId": 5,
+            "price": 1199.00,
+            "costPrice": 850.00,
+            "descriptionEN": "M2 chip, 8GB RAM, 256GB SSD, Liquid Retina display",
+            "descriptionAR": "شريحة M2، رام 8 جيجا، SSD 256 جيجا، شاشة Liquid Retina",
+            "weight": 1.24,
+            "dimensions": "30.4x21.5x1.1 cm",
+            "imageUrl": "/assets/products/macbook-air-m2.jpg",
+            "isActive": true,
+            "stockQuantity": 52
+        },
+        {
+            "id": 13,
+            "sku": "SNY-PS5",
+            "nameEN": "Sony PlayStation 5 Console",
+            "nameAR": "جهاز سوني بلايستيشن 5",
+            "brandId": 1,
+            "categoryId": 1,
+            "price": 499.99,
+            "costPrice": 380.00,
+            "descriptionEN": "Next-gen gaming with 4K/120fps support",
+            "descriptionAR": "ألعاب الجيل القادم مع دعم 4K/120fps",
+            "weight": 4.5,
+            "dimensions": "39x26x10.4 cm",
+            "imageUrl": "/assets/products/sony-ps5.jpg",
+            "isActive": true,
+            "stockQuantity": 38
+        },
+        {
+            "id": 14,
+            "sku": "SAM-BUDS2P",
+            "nameEN": "Samsung Galaxy Buds2 Pro",
+            "nameAR": "سماعات سامسونج جالكسي بادز 2 برو",
+            "brandId": 2,
+            "categoryId": 2,
+            "price": 229.99,
+            "costPrice": 130.00,
+            "descriptionEN": "Intelligent Active Noise Canceling earbuds",
+            "descriptionAR": "سماعات أذن مع إلغاء الضوضاء النشط الذكي",
+            "weight": 0.06,
+            "dimensions": "5x5x2 cm",
+            "imageUrl": "/assets/products/samsung-buds2pro.jpg",
+            "isActive": true,
+            "stockQuantity": 110
+        },
+        {
+            "id": 15,
+            "sku": "APL-AIRPODSP",
+            "nameEN": "Apple AirPods Pro 2nd Gen",
+            "nameAR": "سماعات آبل إيربودز برو الجيل الثاني",
+            "brandId": 3,
+            "categoryId": 2,
+            "price": 249.00,
+            "costPrice": 160.00,
+            "descriptionEN": "Active Noise Cancellation with Adaptive Transparency",
+            "descriptionAR": "إلغاء الضوضاء النشط مع الشفافية التكيفية",
+            "weight": 0.05,
+            "dimensions": "4.5x4.5x2.1 cm",
+            "imageUrl": "/assets/products/airpods-pro-2.jpg",
+            "isActive": true,
+            "stockQuantity": 88
+        }
+    ],
+    "warehouses": [
+        {
+            "id": 1,
+            "code": "DXB-MAIN",
+            "nameEN": "Dubai Main Warehouse",
+            "nameAR": "مستودع دبي الرئيسي",
+            "address": "Dubai Investment Park, Phase 2, Plot 598",
+            "city": "Dubai",
+            "country": "UAE",
+            "phone": "+971-4-885-0000",
+            "email": "dxb-main@erp.com",
+            "capacity": 50000,
+            "isActive": true,
+            "isDefault": true
+        },
+        {
+            "id": 2,
+            "code": "RUH-NORTH",
+            "nameEN": "Riyadh North Hub",
+            "nameAR": "مركز الرياض الشمالي",
+            "address": "Industrial City, Exit 5, Building 18",
+            "city": "Riyadh",
+            "country": "Saudi Arabia",
+            "phone": "+966-11-450-0000",
+            "email": "ruh-north@erp.com",
+            "capacity": 35000,
+            "isActive": true,
+            "isDefault": false
+        },
+        {
+            "id": 3,
+            "code": "CAI-DIST",
+            "nameEN": "Cairo Distribution Center",
+            "nameAR": "مركز توزيع القاهرة",
+            "address": "6th of October City, Industrial Zone B4",
+            "city": "Cairo",
+            "country": "Egypt",
+            "phone": "+20-2-3854-0000",
+            "email": "cai-dist@erp.com",
+            "capacity": 40000,
+            "isActive": true,
+            "isDefault": false
+        },
+        {
+            "id": 4,
+            "code": "ALX-STOR",
+            "nameEN": "Alexandria Storage Facility",
+            "nameAR": "منشأة تخزين الإسكندرية",
+            "address": "Borg El Arab Industrial Zone, Sector 7",
+            "city": "Alexandria",
+            "country": "Egypt",
+            "phone": "+20-3-459-0000",
+            "email": "alx-stor@erp.com",
+            "capacity": 25000,
+            "isActive": true,
+            "isDefault": false
+        }
+    ],
+    "productStock": [
+        {
+            "productId": 1,
+            "warehouseId": 1,
+            "quantity": 80,
+            "reservedQuantity": 5,
+            "reorderLevel": 20
+        },
+        {
+            "productId": 1,
+            "warehouseId": 2,
+            "quantity": 45,
+            "reservedQuantity": 3,
+            "reorderLevel": 15
+        },
+        {
+            "productId": 1,
+            "warehouseId": 3,
+            "quantity": 25,
+            "reservedQuantity": 0,
+            "reorderLevel": 10
+        },
+        {
+            "productId": 2,
+            "warehouseId": 1,
+            "quantity": 50,
+            "reservedQuantity": 8,
+            "reorderLevel": 15
+        },
+        {
+            "productId": 2,
+            "warehouseId": 2,
+            "quantity": 35,
+            "reservedQuantity": 2,
+            "reorderLevel": 10
+        },
+        {
+            "productId": 3,
+            "warehouseId": 1,
+            "quantity": 15,
+            "reservedQuantity": 2,
+            "reorderLevel": 5
+        },
+        {
+            "productId": 3,
+            "warehouseId": 3,
+            "quantity": 10,
+            "reservedQuantity": 1,
+            "reorderLevel": 3
+        },
+        {
+            "productId": 4,
+            "warehouseId": 1,
+            "quantity": 25,
+            "reservedQuantity": 4,
+            "reorderLevel": 8
+        },
+        {
+            "productId": 4,
+            "warehouseId": 2,
+            "quantity": 17,
+            "reservedQuantity": 0,
+            "reorderLevel": 5
+        },
+        {
+            "productId": 5,
+            "warehouseId": 1,
+            "quantity": 40,
+            "reservedQuantity": 6,
+            "reorderLevel": 15
+        },
+        {
+            "productId": 5,
+            "warehouseId": 3,
+            "quantity": 38,
+            "reservedQuantity": 4,
+            "reorderLevel": 12
+        },
+        {
+            "productId": 6,
+            "warehouseId": 1,
+            "quantity": 35,
+            "reservedQuantity": 5,
+            "reorderLevel": 10
+        },
+        {
+            "productId": 6,
+            "warehouseId": 2,
+            "quantity": 28,
+            "reservedQuantity": 3,
+            "reorderLevel": 8
+        },
+        {
+            "productId": 7,
+            "warehouseId": 1,
+            "quantity": 20,
+            "reservedQuantity": 2,
+            "reorderLevel": 6
+        },
+        {
+            "productId": 7,
+            "warehouseId": 4,
+            "quantity": 14,
+            "reservedQuantity": 0,
+            "reorderLevel": 4
+        },
+        {
+            "productId": 8,
+            "warehouseId": 1,
+            "quantity": 18,
+            "reservedQuantity": 1,
+            "reorderLevel": 5
+        },
+        {
+            "productId": 8,
+            "warehouseId": 3,
+            "quantity": 10,
+            "reservedQuantity": 0,
+            "reorderLevel": 4
+        },
+        {
+            "productId": 9,
+            "warehouseId": 1,
+            "quantity": 65,
+            "reservedQuantity": 8,
+            "reorderLevel": 20
+        },
+        {
+            "productId": 9,
+            "warehouseId": 2,
+            "quantity": 55,
+            "reservedQuantity": 5,
+            "reorderLevel": 15
+        },
+        {
+            "productId": 10,
+            "warehouseId": 1,
+            "quantity": 50,
+            "reservedQuantity": 6,
+            "reorderLevel": 18
+        },
+        {
+            "productId": 10,
+            "warehouseId": 2,
+            "quantity": 45,
+            "reservedQuantity": 4,
+            "reorderLevel": 12
+        },
+        {
+            "productId": 11,
+            "warehouseId": 1,
+            "quantity": 25,
+            "reservedQuantity": 3,
+            "reorderLevel": 8
+        },
+        {
+            "productId": 11,
+            "warehouseId": 4,
+            "quantity": 20,
+            "reservedQuantity": 2,
+            "reorderLevel": 6
+        },
+        {
+            "productId": 12,
+            "warehouseId": 1,
+            "quantity": 30,
+            "reservedQuantity": 5,
+            "reorderLevel": 10
+        },
+        {
+            "productId": 12,
+            "warehouseId": 2,
+            "quantity": 22,
+            "reservedQuantity": 2,
+            "reorderLevel": 7
+        },
+        {
+            "productId": 13,
+            "warehouseId": 1,
+            "quantity": 22,
+            "reservedQuantity": 4,
+            "reorderLevel": 8
+        },
+        {
+            "productId": 13,
+            "warehouseId": 3,
+            "quantity": 16,
+            "reservedQuantity": 2,
+            "reorderLevel": 5
+        },
+        {
+            "productId": 14,
+            "warehouseId": 1,
+            "quantity": 60,
+            "reservedQuantity": 10,
+            "reorderLevel": 20
+        },
+        {
+            "productId": 14,
+            "warehouseId": 2,
+            "quantity": 50,
+            "reservedQuantity": 5,
+            "reorderLevel": 15
+        },
+        {
+            "productId": 15,
+            "warehouseId": 1,
+            "quantity": 48,
+            "reservedQuantity": 8,
+            "reorderLevel": 18
+        },
+        {
+            "productId": 15,
+            "warehouseId": 2,
+            "quantity": 40,
+            "reservedQuantity": 4,
+            "reorderLevel": 12
+        }
+    ],
+    "stockMovements": [
+        {
+            "id": 1,
+            "productId": 1,
+            "warehouseId": 1,
+            "movementType": "Restock",
+            "quantity": 100,
+            "referenceNumber": "PO-2024-0001",
+            "notes": "Q1 inventory replenishment",
+            "createdAt": "2024-01-15T09:00:00Z"
+        },
+        {
+            "id": 2,
+            "productId": 2,
+            "warehouseId": 1,
+            "movementType": "Restock",
+            "quantity": 60,
+            "referenceNumber": "PO-2024-0002",
+            "notes": "iPhone 14 restock",
+            "createdAt": "2024-01-18T11:30:00Z"
+        },
+        {
+            "id": 3,
+            "productId": 1,
+            "warehouseId": 1,
+            "movementType": "Reservation",
+            "quantity": -5,
+            "referenceNumber": "ORD-2024-0105",
+            "notes": "Order reservation",
+            "createdAt": "2024-02-01T14:22:00Z"
+        },
+        {
+            "id": 4,
+            "productId": 2,
+            "warehouseId": 1,
+            "movementType": "Commitment",
+            "quantity": -3,
+            "referenceNumber": "ORD-2024-0098",
+            "notes": "Stock committed for shipment",
+            "createdAt": "2024-02-02T10:15:00Z"
+        },
+        {
+            "id": 5,
+            "productId": 5,
+            "warehouseId": 1,
+            "movementType": "Transfer",
+            "quantity": -15,
+            "referenceNumber": "TRF-2024-0012",
+            "notes": "Transfer to Cairo warehouse",
+            "createdAt": "2024-02-05T08:45:00Z"
+        },
+        {
+            "id": 6,
+            "productId": 5,
+            "warehouseId": 3,
+            "movementType": "Transfer",
+            "quantity": 15,
+            "referenceNumber": "TRF-2024-0012",
+            "notes": "Received from Dubai warehouse",
+            "createdAt": "2024-02-07T16:00:00Z"
+        },
+        {
+            "id": 7,
+            "productId": 9,
+            "warehouseId": 1,
+            "movementType": "Adjustment",
+            "quantity": -2,
+            "referenceNumber": "ADJ-2024-0008",
+            "notes": "Damaged items written off",
+            "createdAt": "2024-02-10T13:30:00Z"
+        },
+        {
+            "id": 8,
+            "productId": 13,
+            "warehouseId": 1,
+            "movementType": "Restock",
+            "quantity": 30,
+            "referenceNumber": "PO-2024-0015",
+            "notes": "PS5 console restock",
+            "createdAt": "2024-02-12T09:00:00Z"
+        }
+    ],
+    "customers": [
+        {
+            "id": "cust-001",
+            "firstNameEN": "John",
+            "firstNameAR": "جون",
+            "lastNameEN": "Smith",
+            "lastNameAR": "سميث",
+            "email": "john.smith@email.com",
+            "phone": "+971-50-123-4567",
+            "addressEN": "Downtown Dubai, Marina Walk 24",
+            "addressAR": "وسط دبي، ممشى المارينا 24",
+            "city": "Dubai",
+            "country": "UAE"
+        },
+        {
+            "id": "cust-002",
+            "firstNameEN": "Sarah",
+            "firstNameAR": "سارة",
+            "lastNameEN": "Ahmed",
+            "lastNameAR": "أحمد",
+            "email": "sarah.ahmed@email.com",
+            "phone": "+966-55-987-6543",
+            "addressEN": "Al Olaya District, King Fahd Road 112",
+            "addressAR": "حي العليا، طريق الملك فهد 112",
+            "city": "Riyadh",
+            "country": "Saudi Arabia"
+        },
+        {
+            "id": "cust-003",
+            "firstNameEN": "Mohamed",
+            "firstNameAR": "محمد",
+            "lastNameEN": "Hassan",
+            "lastNameAR": "حسن",
+            "email": "mohamed.hassan@email.com",
+            "phone": "+20-10-555-1234",
+            "addressEN": "Zamalek, 26th July Street 45",
+            "addressAR": "الزمالك، شارع 26 يوليو 45",
+            "city": "Cairo",
+            "country": "Egypt"
+        },
+        {
+            "id": "cust-004",
+            "firstNameEN": "Fatima",
+            "firstNameAR": "فاطمة",
+            "lastNameEN": "Al-Qasimi",
+            "lastNameAR": "القاسمي",
+            "email": "fatima.q@email.com",
+            "phone": "+971-56-789-0123",
+            "addressEN": "Jumeirah Beach Residence, Tower 8",
+            "addressAR": "جميرا بيتش ريزيدنس، برج 8",
+            "city": "Dubai",
+            "country": "UAE"
+        },
+        {
+            "id": "cust-005",
+            "firstNameEN": "Ali",
+            "firstNameAR": "علي",
+            "lastNameEN": "Mahmoud",
+            "lastNameAR": "محمود",
+            "email": "ali.mahmoud@email.com",
+            "phone": "+20-12-234-5678",
+            "addressEN": "New Cairo, 5th Settlement, Street 90",
+            "addressAR": "القاهرة الجديدة، التجمع الخامس، شارع 90",
+            "city": "Cairo",
+            "country": "Egypt"
+        },
+        {
+            "id": "cust-006",
+            "firstNameEN": "Layla",
+            "firstNameAR": "ليلى",
+            "lastNameEN": "Khalid",
+            "lastNameAR": "خالد",
+            "email": "layla.k@email.com",
+            "phone": "+966-50-111-2222",
+            "addressEN": "Jeddah Corniche, Al Hamra District",
+            "addressAR": "كورنيش جدة، حي الحمراء",
+            "city": "Jeddah",
+            "country": "Saudi Arabia"
+        }
+    ],
+    "orders": [
+        {
+            "id": 1,
+            "orderNumber": "ORD-2024-0145",
+            "customerId": "cust-001",
+            "warehouseId": 1,
+            "status": "Delivered",
+            "paymentStatus": "Paid",
+            "subTotal": 1548.98,
+            "taxAmount": 77.45,
+            "shippingAmount": 25.00,
+            "discountAmount": 50.00,
+            "totalAmount": 1601.43,
+            "currency": "AED",
+            "shippingName": "John Smith",
+            "shippingAddress": "Downtown Dubai, Marina Walk 24",
+            "shippingCity": "Dubai",
+            "shippingCountry": "UAE",
+            "createdAt": "2024-01-20T10:30:00Z",
+            "confirmedAt": "2024-01-20T11:00:00Z",
+            "shippedAt": "2024-01-21T09:00:00Z",
+            "deliveredAt": "2024-01-23T14:30:00Z"
+        },
+        {
+            "id": 2,
+            "orderNumber": "ORD-2024-0152",
+            "customerId": "cust-002",
+            "warehouseId": 2,
+            "status": "Shipped",
+            "paymentStatus": "Paid",
+            "subTotal": 1199.99,
+            "taxAmount": 180.00,
+            "shippingAmount": 0.00,
+            "discountAmount": 0.00,
+            "totalAmount": 1379.99,
+            "currency": "SAR",
+            "shippingName": "Sarah Ahmed",
+            "shippingAddress": "Al Olaya District, King Fahd Road 112",
+            "shippingCity": "Riyadh",
+            "shippingCountry": "Saudi Arabia",
+            "createdAt": "2024-02-01T14:22:00Z",
+            "confirmedAt": "2024-02-01T15:00:00Z",
+            "shippedAt": "2024-02-02T10:15:00Z"
+        },
+        {
+            "id": 3,
+            "orderNumber": "ORD-2024-0158",
+            "customerId": "cust-003",
+            "warehouseId": 3,
+            "status": "Confirmed",
+            "paymentStatus": "Paid",
+            "subTotal": 728.99,
+            "taxAmount": 102.06,
+            "shippingAmount": 35.00,
+            "discountAmount": 0.00,
+            "totalAmount": 866.05,
+            "currency": "EGP",
+            "shippingName": "Mohamed Hassan",
+            "shippingAddress": "Zamalek, 26th July Street 45",
+            "shippingCity": "Cairo",
+            "shippingCountry": "Egypt",
+            "createdAt": "2024-02-05T09:15:00Z",
+            "confirmedAt": "2024-02-05T10:00:00Z"
+        },
+        {
+            "id": 4,
+            "orderNumber": "ORD-2024-0163",
+            "customerId": "cust-004",
+            "warehouseId": 1,
+            "status": "Processing",
+            "paymentStatus": "Paid",
+            "subTotal": 2748.99,
+            "taxAmount": 137.45,
+            "shippingAmount": 0.00,
+            "discountAmount": 100.00,
+            "totalAmount": 2786.44,
+            "currency": "AED",
+            "shippingName": "Fatima Al-Qasimi",
+            "shippingAddress": "Jumeirah Beach Residence, Tower 8",
+            "shippingCity": "Dubai",
+            "shippingCountry": "UAE",
+            "createdAt": "2024-02-08T16:45:00Z",
+            "confirmedAt": "2024-02-08T17:30:00Z"
+        },
+        {
+            "id": 5,
+            "orderNumber": "ORD-2024-0171",
+            "customerId": "cust-005",
+            "warehouseId": 3,
+            "status": "Pending",
+            "paymentStatus": "Pending",
+            "subTotal": 499.99,
+            "taxAmount": 70.00,
+            "shippingAmount": 50.00,
+            "discountAmount": 0.00,
+            "totalAmount": 619.99,
+            "currency": "EGP",
+            "shippingName": "Ali Mahmoud",
+            "shippingAddress": "New Cairo, 5th Settlement, Street 90",
+            "shippingCity": "Cairo",
+            "shippingCountry": "Egypt",
+            "createdAt": "2024-02-10T11:20:00Z"
+        },
+        {
+            "id": 6,
+            "orderNumber": "ORD-2024-0178",
+            "customerId": "cust-006",
+            "warehouseId": 2,
+            "status": "Draft",
+            "paymentStatus": "Pending",
+            "subTotal": 329.98,
+            "taxAmount": 49.50,
+            "shippingAmount": 25.00,
+            "discountAmount": 0.00,
+            "totalAmount": 404.48,
+            "currency": "SAR",
+            "shippingName": "Layla Khalid",
+            "shippingAddress": "Jeddah Corniche, Al Hamra District",
+            "shippingCity": "Jeddah",
+            "shippingCountry": "Saudi Arabia",
+            "createdAt": "2024-02-12T08:00:00Z"
+        }
+    ],
+    "orderItems": [
+        {
+            "orderId": 1,
+            "productId": 1,
+            "quantity": 1,
+            "unitPrice": 349.99,
+            "discountAmount": 0,
+            "totalPrice": 349.99
+        },
+        {
+            "orderId": 1,
+            "productId": 2,
+            "quantity": 1,
+            "unitPrice": 1199.00,
+            "discountAmount": 50.00,
+            "totalPrice": 1149.00
+        },
+        {
+            "orderId": 2,
+            "productId": 6,
+            "quantity": 1,
+            "unitPrice": 1199.99,
+            "discountAmount": 0,
+            "totalPrice": 1199.99
+        },
+        {
+            "orderId": 3,
+            "productId": 5,
+            "quantity": 1,
+            "unitPrice": 229.00,
+            "discountAmount": 0,
+            "totalPrice": 229.00
+        },
+        {
+            "orderId": 3,
+            "productId": 13,
+            "quantity": 1,
+            "unitPrice": 499.99,
+            "discountAmount": 0,
+            "totalPrice": 499.99
+        },
+        {
+            "orderId": 4,
+            "productId": 3,
+            "quantity": 1,
+            "unitPrice": 2499.99,
+            "discountAmount": 100.00,
+            "totalPrice": 2399.99
+        },
+        {
+            "orderId": 4,
+            "productId": 15,
+            "quantity": 1,
+            "unitPrice": 249.00,
+            "discountAmount": 0,
+            "totalPrice": 249.00
+        },
+        {
+            "orderId": 5,
+            "productId": 13,
+            "quantity": 1,
+            "unitPrice": 499.99,
+            "discountAmount": 0,
+            "totalPrice": 499.99
+        },
+        {
+            "orderId": 6,
+            "productId": 9,
+            "quantity": 1,
+            "unitPrice": 99.99,
+            "discountAmount": 0,
+            "totalPrice": 99.99
+        },
+        {
+            "orderId": 6,
+            "productId": 14,
+            "quantity": 1,
+            "unitPrice": 229.99,
+            "discountAmount": 0,
+            "totalPrice": 229.99
+        }
+    ],
+    "carriers": [
+        {
+            "id": 1,
+            "name": "DHL Express",
+            "code": "DHL",
+            "trackingUrlTemplate": "https://www.dhl.com/track?id={tracking}",
+            "contactPhone": "+971-4-299-6000",
+            "contactEmail": "support@dhl.ae",
+            "isActive": true
+        },
+        {
+            "id": 2,
+            "name": "FedEx",
+            "code": "FDX",
+            "trackingUrlTemplate": "https://www.fedex.com/track?trknbr={tracking}",
+            "contactPhone": "+971-4-881-8888",
+            "contactEmail": "support@fedex.ae",
+            "isActive": true
+        },
+        {
+            "id": 3,
+            "name": "Aramex",
+            "code": "ARX",
+            "trackingUrlTemplate": "https://www.aramex.com/track?shipment={tracking}",
+            "contactPhone": "+971-4-286-5000",
+            "contactEmail": "support@aramex.com",
+            "isActive": true
+        },
+        {
+            "id": 4,
+            "name": "Emirates Post",
+            "code": "EMP",
+            "trackingUrlTemplate": "https://epg.gov.ae/track?ref={tracking}",
+            "contactPhone": "+971-600-599-999",
+            "contactEmail": "support@emiratespost.ae",
+            "isActive": true
+        }
+    ],
+    "shipments": [
+        {
+            "id": 1,
+            "orderId": 1,
+            "warehouseId": 1,
+            "carrierId": 1,
+            "trackingNumber": "DHL-9920145892",
+            "shippingMethod": "Express",
+            "status": "Delivered",
+            "estimatedDeliveryDate": "2024-01-23",
+            "actualDeliveryDate": "2024-01-23",
+            "shippedAt": "2024-01-21T09:00:00Z",
+            "deliveredAt": "2024-01-23T14:30:00Z",
+            "shippingCost": 25.00,
+            "recipientName": "John Smith",
+            "deliveryAddress": "Downtown Dubai, Marina Walk 24",
+            "deliveryCity": "Dubai",
+            "deliveryCountry": "UAE"
+        },
+        {
+            "id": 2,
+            "orderId": 2,
+            "warehouseId": 2,
+            "carrierId": 3,
+            "trackingNumber": "ARX-5567892341",
+            "shippingMethod": "Standard",
+            "status": "InTransit",
+            "estimatedDeliveryDate": "2024-02-05",
+            "shippedAt": "2024-02-02T10:15:00Z",
+            "shippingCost": 0.00,
+            "recipientName": "Sarah Ahmed",
+            "deliveryAddress": "Al Olaya District, King Fahd Road 112",
+            "deliveryCity": "Riyadh",
+            "deliveryCountry": "Saudi Arabia"
+        }
+    ],
+    "workers": [
+        {
+            "id": 1,
+            "employeeId": "EMP-001",
+            "nameEN": "Ahmed Ali",
+            "nameAR": "أحمد علي",
+            "email": "ahmed.ali@erp.com",
+            "phone": "+971-50-111-0001",
+            "role": "Warehouse Manager",
+            "warehouseId": 1,
+            "hireDate": "2020-03-15",
+            "isActive": true
+        },
+        {
+            "id": 2,
+            "employeeId": "EMP-002",
+            "nameEN": "Omar Hassan",
+            "nameAR": "عمر حسن",
+            "email": "omar.hassan@erp.com",
+            "phone": "+971-50-111-0002",
+            "role": "Picker",
+            "warehouseId": 1,
+            "hireDate": "2021-06-01",
+            "isActive": true
+        },
+        {
+            "id": 3,
+            "employeeId": "EMP-003",
+            "nameEN": "Youssef Mohamed",
+            "nameAR": "يوسف محمد",
+            "email": "youssef.m@erp.com",
+            "phone": "+971-50-111-0003",
+            "role": "Packer",
+            "warehouseId": 1,
+            "hireDate": "2022-01-10",
+            "isActive": true
+        },
+        {
+            "id": 4,
+            "employeeId": "EMP-004",
+            "nameEN": "Khalid Saeed",
+            "nameAR": "خالد سعيد",
+            "email": "khalid.s@erp.com",
+            "phone": "+971-50-111-0004",
+            "role": "Driver",
+            "warehouseId": 1,
+            "hireDate": "2021-09-20",
+            "isActive": true
+        },
+        {
+            "id": 5,
+            "employeeId": "EMP-005",
+            "nameEN": "Noura Al-Farsi",
+            "nameAR": "نورا الفارسي",
+            "email": "noura.f@erp.com",
+            "phone": "+966-55-222-0001",
+            "role": "Warehouse Manager",
+            "warehouseId": 2,
+            "hireDate": "2019-11-05",
+            "isActive": true
+        },
+        {
+            "id": 6,
+            "employeeId": "EMP-006",
+            "nameEN": "Hana Ibrahim",
+            "nameAR": "هنا إبراهيم",
+            "email": "hana.i@erp.com",
+            "phone": "+20-10-333-0001",
+            "role": "Warehouse Manager",
+            "warehouseId": 3,
+            "hireDate": "2020-08-12",
+            "isActive": true
+        },
+        {
+            "id": 7,
+            "employeeId": "EMP-007",
+            "nameEN": "Mahmoud Farid",
+            "nameAR": "محمود فريد",
+            "email": "mahmoud.f@erp.com",
+            "phone": "+20-10-333-0002",
+            "role": "Picker",
+            "warehouseId": 3,
+            "hireDate": "2022-04-18",
+            "isActive": true
+        },
+        {
+            "id": 8,
+            "employeeId": "EMP-008",
+            "nameEN": "Salma Nasser",
+            "nameAR": "سلمى ناصر",
+            "email": "salma.n@erp.com",
+            "phone": "+20-3-444-0001",
+            "role": "Packer",
+            "warehouseId": 4,
+            "hireDate": "2023-02-01",
+            "isActive": true
+        }
+    ],
+    "supportTickets": [
+        {
+            "id": 1,
+            "ticketNumber": "TKT-2024-0089",
+            "customerId": "cust-001",
+            "orderId": 1,
+            "subjectEN": "Late Delivery",
+            "subjectAR": "تأخر التوصيل",
+            "descriptionEN": "My order was supposed to arrive on Jan 22 but it arrived on Jan 23. I had to change my schedule because of this delay.",
+            "descriptionAR": "كان من المفترض أن يصل طلبي في 22 يناير لكنه وصل في 23 يناير. اضطررت لتغيير جدولي بسبب هذا التأخير.",
+            "priority": "Medium",
+            "status": "Resolved",
+            "category": "Delivery",
+            "createdAt": "2024-01-23T15:00:00Z",
+            "resolvedAt": "2024-01-24T10:30:00Z"
+        },
+        {
+            "id": 2,
+            "ticketNumber": "TKT-2024-0095",
+            "customerId": "cust-003",
+            "orderId": 3,
+            "subjectEN": "Damaged Product",
+            "subjectAR": "منتج تالف",
+            "descriptionEN": "The PlayStation 5 box arrived with visible damage. The console seems fine but I'm concerned about warranty.",
+            "descriptionAR": "وصل صندوق بلايستيشن 5 مع تلف واضح. الجهاز يبدو جيدًا لكنني قلق بشأن الضمان.",
+            "priority": "High",
+            "status": "InProgress",
+            "category": "Product Quality",
+            "createdAt": "2024-02-06T11:45:00Z"
+        },
+        {
+            "id": 3,
+            "ticketNumber": "TKT-2024-0102",
+            "customerId": "cust-004",
+            "orderId": 4,
+            "subjectEN": "Missing Item",
+            "subjectAR": "منتج مفقود",
+            "descriptionEN": "I ordered AirPods Pro with the TV but only received the TV. Please check and send the missing item.",
+            "descriptionAR": "طلبت AirPods Pro مع التلفزيون لكنني استلمت التلفزيون فقط. يرجى التحقق وإرسال المنتج المفقود.",
+            "priority": "High",
+            "status": "Open",
+            "category": "Order Issue",
+            "createdAt": "2024-02-09T09:20:00Z"
+        },
+        {
+            "id": 4,
+            "ticketNumber": "TKT-2024-0108",
+            "customerId": "cust-002",
+            "orderId": 2,
+            "subjectEN": "Tracking Not Updating",
+            "subjectAR": "التتبع لا يتحدث",
+            "descriptionEN": "The tracking number shows the shipment is still in Riyadh for 2 days now. Can you check the status?",
+            "descriptionAR": "رقم التتبع يظهر أن الشحنة لا تزال في الرياض منذ يومين. هل يمكنكم التحقق من الحالة؟",
+            "priority": "Low",
+            "status": "Open",
+            "category": "Delivery",
+            "createdAt": "2024-02-10T14:10:00Z"
+        }
+    ]
+}

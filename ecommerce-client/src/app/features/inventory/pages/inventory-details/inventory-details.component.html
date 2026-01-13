@@ -1,0 +1,532 @@
+<!-- ==============================================
+     Inventory Details - Enterprise ERP Style
+     Matching Reference Images (Desktop/Tablet/Mobile)
+     ============================================== -->
+
+<div [attr.dir]="dir" class="min-h-full bg-slate-50">
+
+    <!-- ==================== DESKTOP/TABLET VIEW ==================== -->
+    <div class="hidden md:block p-6 lg:p-8 space-y-6">
+
+        <!-- Loading State -->
+        <ng-container *ngIf="isLoading()">
+            <div class="flex flex-col items-center justify-center min-h-[60vh]">
+                <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-4">
+                </div>
+                <span class="text-sm text-slate-500">{{ 'COMMON.LOADING' | translate }}</span>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoading() && stock() as productStock">
+
+            <!-- Breadcrumb -->
+            <nav class="flex items-center gap-2 text-sm text-slate-500">
+                <a routerLink="/dashboard" class="hover:text-indigo-600 transition-colors">
+                    {{ 'COMMON.HOME' | translate }}
+                </a>
+                <i class="fas fa-chevron-right text-xs text-slate-300 rtl:rotate-180"></i>
+                <a routerLink="/inventory" class="hover:text-indigo-600 transition-colors">
+                    {{ 'INVENTORY.TITLE' | translate }}
+                </a>
+                <i class="fas fa-chevron-right text-xs text-slate-300 rtl:rotate-180"></i>
+                <span class="text-slate-800 font-medium truncate max-w-[200px]">{{ productStock.productName }}</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800">
+                        {{ 'INVENTORY.DETAILS_TITLE' | translate }}
+                    </h1>
+                    <p class="mt-1 text-sm text-slate-500">
+                        {{ 'INVENTORY.DETAILS_SUBTITLE' | translate }}
+                    </p>
+                </div>
+
+                <!-- Back Button -->
+                <a routerLink="/inventory"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all">
+                    <i class="fas fa-arrow-left text-sm rtl:rotate-180"></i>
+                    {{ 'INVENTORY.BACK_TO_LIST' | translate }}
+                </a>
+            </div>
+
+            <!-- Product Info Bar -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
+                    <!-- Product Name -->
+                    <div>
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'INVENTORY.PRODUCT' | translate }}
+                        </span>
+                        <p class="mt-1 font-semibold text-slate-800 truncate">{{ productStock.productName }}</p>
+                    </div>
+
+                    <!-- SKU -->
+                    <div>
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'INVENTORY.SKU' | translate }}
+                        </span>
+                        <p class="mt-1 font-mono text-slate-700">{{ productStock.productSKU }}</p>
+                    </div>
+
+                    <!-- Brand -->
+                    <div class="hidden lg:block">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'COMMON.BRAND' | translate }}
+                        </span>
+                        <p class="mt-1 text-slate-700">{{ productStock.brandName || '-' }}</p>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="hidden lg:block">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'COMMON.CATEGORY' | translate }}
+                        </span>
+                        <p class="mt-1 text-slate-700">{{ productStock.categoryName || '-' }}</p>
+                    </div>
+
+                    <!-- Warehouse -->
+                    <div>
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{ 'INVENTORY.WAREHOUSE' | translate }}
+                        </span>
+                        <div class="mt-1 flex items-center gap-1.5">
+                            <i class="fas fa-warehouse text-slate-400 text-sm"></i>
+                            <span class="text-slate-700">{{ productStock.warehouseName }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Quantity On Hand -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-sm text-slate-500">{{ 'INVENTORY.QUANTITY_ON_HAND' | translate }}</span>
+                            <div class="mt-2 flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-slate-800">{{ productStock.quantityOnHand }}</span>
+                                <span class="text-sm text-slate-500">{{ 'COMMON.UNITS' | translate }}</span>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-400">{{ 'INVENTORY.ON_HAND_DESC' | translate }}</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-boxes text-blue-600"></i>
+                            </div>
+                            <app-stock-status-badge [quantityOnHand]="productStock.quantityOnHand"
+                                [reorderLevel]="productStock.reorderLevel">
+                            </app-stock-status-badge>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quantity Reserved -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-sm text-slate-500">{{ 'INVENTORY.QUANTITY_RESERVED' | translate }}</span>
+                            <div class="mt-2 flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-slate-800">{{ productStock.quantityReserved
+                                    }}</span>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-400">{{ 'INVENTORY.RESERVED_DESC' | translate }}</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-lock text-amber-600"></i>
+                            </div>
+                            <span *ngIf="productStock.quantityReserved > 0"
+                                class="px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full">
+                                {{ 'INVENTORY.COMMITTED' | translate }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quantity Available -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 ring-2 ring-indigo-100">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-sm text-slate-500">{{ 'INVENTORY.QUANTITY_AVAILABLE' | translate }}</span>
+                            <div class="mt-2 flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-indigo-600">{{ productStock.quantityAvailable
+                                    }}</span>
+                                <span class="text-sm text-slate-500">{{ 'COMMON.UNITS' | translate }}</span>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-400">{{ 'INVENTORY.AVAILABLE_DESC' | translate }}</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-check-circle text-indigo-600"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
+                                {{ 'INVENTORY.SELLABLE' | translate }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Movement History Section -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <!-- Section Header -->
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-history text-slate-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-800">{{ 'INVENTORY.MOVEMENT_HISTORY' | translate }}
+                        </h3>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <!-- Export CSV -->
+                        <button type="button"
+                            class="inline-flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-colors">
+                            <i class="fas fa-download text-xs"></i>
+                            {{ 'COMMON.EXPORT' | translate }} CSV
+                        </button>
+
+                        <!-- Action Buttons -->
+                        <button type="button" (click)="openTransferModal()"
+                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-all">
+                            <i class="fas fa-exchange-alt text-sm"></i>
+                            {{ 'INVENTORY.TRANSFER_STOCK' | translate }}
+                        </button>
+
+                        <button type="button" (click)="openAdjustModal(2)"
+                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                            <i class="fas fa-sliders-h text-sm"></i>
+                            {{ 'INVENTORY.ADJUST_STOCK' | translate }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="px-6 py-4 text-start">
+                                    <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                                        {{ 'INVENTORY.DATE_TIME' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-4 text-start">
+                                    <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                                        {{ 'INVENTORY.MOVEMENT_TYPE' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-4 text-center">
+                                    <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                                        {{ 'INVENTORY.QUANTITY' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-4 text-start">
+                                    <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                                        {{ 'INVENTORY.REFERENCE' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-4 text-start">
+                                    <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                                        {{ 'INVENTORY.PERFORMED_BY' | translate }}
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <!-- Empty State -->
+                            <tr *ngIf="movements().length === 0">
+                                <td colspan="5" class="px-6 py-16">
+                                    <div class="flex flex-col items-center justify-center text-center">
+                                        <div
+                                            class="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-4">
+                                            <i class="fas fa-history text-xl text-slate-400"></i>
+                                        </div>
+                                        <h4 class="text-lg font-semibold text-slate-700 mb-1">{{
+                                            'INVENTORY.NO_MOVEMENTS' | translate }}</h4>
+                                        <p class="text-sm text-slate-500">{{ 'INVENTORY.NO_MOVEMENTS_DESC' | translate
+                                            }}</p>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Data Rows -->
+                            <tr *ngFor="let move of movements()" class="hover:bg-slate-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="text-sm font-medium text-slate-800">
+                                        {{ move.createdAt | date:'MMM dd, yyyy' }}
+                                    </div>
+                                    <div class="text-xs text-slate-500">
+                                        {{ move.createdAt | date:'hh:mm a' }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+                                        [ngClass]="getMovementBadgeClass(move.movementType)">
+                                        <span class="w-1.5 h-1.5 rounded-full"
+                                            [ngClass]="getMovementDotClass(move.movementType)"></span>
+                                        {{ getMovementLabel(move.movementType) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-sm font-bold"
+                                        [ngClass]="{'text-emerald-600': move.quantity > 0, 'text-red-600': move.quantity < 0, 'text-slate-600': move.quantity === 0}">
+                                        {{ move.quantity > 0 ? '+' : '' }}{{ move.quantity }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a *ngIf="move.referenceId" [routerLink]="getReferenceLink(move)"
+                                        class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                                        {{ move.referenceType ? move.referenceType + '-' : '#' }}{{ move.referenceId }}
+                                    </a>
+                                    <span *ngIf="!move.referenceId" class="text-sm text-slate-500">
+                                        {{ move.reason || 'Manual' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-2">
+                                        <div
+                                            class="w-7 h-7 bg-slate-200 rounded-full flex items-center justify-center text-xs font-semibold text-slate-600">
+                                            {{ getInitials(move.performedBy) }}
+                                        </div>
+                                        <span class="text-sm text-slate-700">{{ move.performedBy || 'System' }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div *ngIf="movements().length > 0"
+                    class="flex items-center justify-between px-6 py-4 bg-slate-50 border-t border-slate-200">
+                    <div class="text-sm text-slate-600">
+                        {{ 'COMMON.SHOWING' | translate }} <span class="font-semibold">{{ movements().length }}</span>
+                        {{ 'COMMON.RESULTS' | translate }}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button type="button" disabled
+                            class="px-3 py-2 bg-white border border-slate-200 text-slate-400 rounded-lg text-sm cursor-not-allowed">
+                            <i class="fas fa-chevron-left rtl:rotate-180"></i>
+                        </button>
+                        <button type="button"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold">
+                            1
+                        </button>
+                        <button type="button" disabled
+                            class="px-3 py-2 bg-white border border-slate-200 text-slate-400 rounded-lg text-sm cursor-not-allowed">
+                            <i class="fas fa-chevron-right rtl:rotate-180"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- ==================== MOBILE VIEW ==================== -->
+    <div class="md:hidden min-h-screen flex flex-col bg-slate-50">
+
+        <!-- Mobile Header -->
+        <div class="sticky top-0 z-40 bg-white border-b border-slate-200">
+            <div class="flex items-center justify-between px-4 py-3">
+                <a routerLink="/inventory" class="p-2 -ml-2 text-slate-600">
+                    <i class="fas fa-arrow-left rtl:rotate-180"></i>
+                </a>
+                <h1 class="font-semibold text-slate-800">{{ 'INVENTORY.DETAILS_TITLE' | translate }}</h1>
+                <button type="button" class="p-2 -mr-2 text-slate-600">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+
+            <!-- Breadcrumb -->
+            <div class="px-4 pb-3 text-xs text-slate-500">
+                <span>{{ 'COMMON.HOME' | translate }}</span>
+                <i class="fas fa-chevron-right text-[10px] mx-1.5 rtl:rotate-180"></i>
+                <span>{{ 'INVENTORY.TITLE' | translate }}</span>
+                <i class="fas fa-chevron-right text-[10px] mx-1.5 rtl:rotate-180"></i>
+                <span class="text-slate-800 font-medium">{{ stock()?.productName | slice:0:20 }}...</span>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="isLoading()" class="flex-1 flex items-center justify-center">
+            <div class="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+        </div>
+
+        <ng-container *ngIf="!isLoading() && stock() as productStock">
+            <!-- Mobile Content -->
+            <div class="flex-1 overflow-y-auto p-4 pb-32 space-y-4">
+
+                <!-- Product Info Card -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-box text-slate-400 text-xl"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="font-semibold text-slate-800 truncate">{{ productStock.productName }}</h3>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                                    {{ productStock.productSKU }}
+                                </span>
+                                <span *ngIf="productStock.brandName" class="text-xs text-slate-500">
+                                    {{ productStock.brandName }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">{{ 'COMMON.CATEGORY' | translate }}</span>
+                            <p class="text-sm text-slate-700 mt-0.5">{{ productStock.categoryName || '-' }}</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">{{ 'INVENTORY.WAREHOUSE' | translate
+                                }}</span>
+                            <div class="flex items-center gap-1 mt-0.5">
+                                <i class="fas fa-warehouse text-slate-400 text-xs"></i>
+                                <span class="text-sm text-slate-700">{{ productStock.warehouseName }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Summary Section -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <h4 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                        <span class="w-1 h-4 bg-indigo-600 rounded-full"></span>
+                        {{ 'INVENTORY.STOCK_SUMMARY' | translate }}
+                    </h4>
+
+                    <!-- Available to Sell (Main) -->
+                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <span class="text-sm text-slate-500">{{ 'INVENTORY.AVAILABLE_TO_SELL' | translate }}</span>
+                            <div class="text-3xl font-bold text-indigo-600 mt-1">
+                                {{ productStock.quantityAvailable }}
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <app-stock-status-badge [quantityOnHand]="productStock.quantityOnHand"
+                                [reorderLevel]="productStock.reorderLevel">
+                            </app-stock-status-badge>
+                            <!-- Circular Indicator -->
+                            <div class="relative w-14 h-14">
+                                <svg class="w-14 h-14 transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="text-slate-200" stroke="currentColor" stroke-width="3" fill="none"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="text-indigo-600" stroke="currentColor" stroke-width="3" fill="none"
+                                        stroke-linecap="round"
+                                        [attr.stroke-dasharray]="getAvailabilityPercent() + ', 100'"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <span
+                                    class="absolute inset-0 flex items-center justify-center text-xs font-bold text-slate-600">
+                                    {{ getAvailabilityPercent() }}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- On Hand / Reserved Row -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">{{ 'INVENTORY.ON_HAND' | translate }}</span>
+                            <p class="text-2xl font-bold text-slate-800 mt-1">{{ productStock.quantityOnHand }}</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase">{{ 'INVENTORY.RESERVED' | translate }}</span>
+                            <p class="text-2xl font-bold text-amber-600 mt-1">{{ productStock.quantityReserved }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" (click)="openAdjustModal(2)"
+                        class="flex items-center justify-center gap-2 py-3 bg-indigo-600 text-white font-semibold rounded-xl">
+                        <i class="fas fa-sliders-h"></i>
+                        {{ 'INVENTORY.ADJUST_STOCK' | translate }}
+                    </button>
+                    <button type="button" (click)="openTransferModal()"
+                        class="flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl">
+                        <i class="fas fa-exchange-alt"></i>
+                        {{ 'INVENTORY.TRANSFER' | translate }}
+                    </button>
+                </div>
+
+                <!-- Movement History -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-semibold text-slate-800">{{ 'INVENTORY.MOVEMENT_HISTORY' | translate }}</h4>
+                        <a routerLink="/inventory/movements"
+                            [queryParams]="{productId: productId, warehouseId: warehouseId}"
+                            class="text-sm text-indigo-600 font-medium">
+                            {{ 'INVENTORY.VIEW_ALL' | translate }}
+                        </a>
+                    </div>
+
+                    <!-- Movement Cards -->
+                    <div class="space-y-3">
+                        <div *ngIf="movements().length === 0" class="py-8 text-center text-slate-400">
+                            <i class="fas fa-history text-2xl mb-2"></i>
+                            <p class="text-sm">{{ 'INVENTORY.NO_MOVEMENTS' | translate }}</p>
+                        </div>
+
+                        <div *ngFor="let move of movements().slice(0, 5)"
+                            class="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
+                            <div class="flex items-center gap-3">
+                                <span class="w-2 h-2 rounded-full"
+                                    [ngClass]="getMovementDotClass(move.movementType)"></span>
+                                <div>
+                                    <span class="text-sm font-medium text-slate-800">
+                                        {{ getMovementLabel(move.movementType) }}
+                                    </span>
+                                    <p class="text-xs text-slate-500">{{ move.createdAt | date:'MMM dd, yyyy' }}</p>
+                                </div>
+                            </div>
+                            <span class="text-sm font-bold"
+                                [ngClass]="{'text-emerald-600': move.quantity > 0, 'text-red-600': move.quantity < 0}">
+                                {{ move.quantity > 0 ? '+' : '' }}{{ move.quantity }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Bottom Tab Bar -->
+            <div class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-50">
+                <div class="flex items-center justify-around py-2">
+                    <a routerLink="/dashboard" class="flex flex-col items-center gap-1 py-2 px-4 text-slate-400">
+                        <i class="fas fa-home text-lg"></i>
+                        <span class="text-xs">{{ 'SIDEBAR.DASHBOARD' | translate }}</span>
+                    </a>
+                    <a routerLink="/inventory" class="flex flex-col items-center gap-1 py-2 px-4 text-indigo-600">
+                        <i class="fas fa-boxes text-lg"></i>
+                        <span class="text-xs font-medium">{{ 'SIDEBAR.INVENTORY' | translate }}</span>
+                    </a>
+                    <a routerLink="/orders" class="flex flex-col items-center gap-1 py-2 px-4 text-slate-400">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span class="text-xs">{{ 'SIDEBAR.ORDERS' | translate }}</span>
+                    </a>
+                    <a routerLink="/settings" class="flex flex-col items-center gap-1 py-2 px-4 text-slate-400">
+                        <i class="fas fa-cog text-lg"></i>
+                        <span class="text-xs">{{ 'SIDEBAR.SETTINGS' | translate }}</span>
+                    </a>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Adjust Stock Dialog -->
+<app-adjust-stock-dialog [isOpen]="isModalOpen" [productName]="stock()?.productName || ''"
+    [currentQuantity]="stock()?.quantityOnHand || 0" [type]="modalType" [isSubmitting]="isSubmitting"
+    (onClose)="onModalClose()" (onConfirm)="onModalConfirm($event)">
+</app-adjust-stock-dialog>

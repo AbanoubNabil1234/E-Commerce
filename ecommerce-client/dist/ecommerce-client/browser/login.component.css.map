@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/auth/pages/login/login.component.scss"],
+  "sourcesContent": ["/* Login Component Styles */\r\n/* Using Tailwind for most styling, this is for any custom overrides */\r\n\r\n:host {\r\n    display: block;\r\n}\r\n\r\n/* Focus states for accessibility */\r\ninput:focus {\r\n    outline: none;\r\n}\r\n\r\n/* RTL adjustments handled via Tailwind's start/end utilities */\r\n"],
+  "mappings": ";AAGA;AACI,WAAA;;AAIJ,KAAA;AACI,WAAA;;",
+  "names": []
+}

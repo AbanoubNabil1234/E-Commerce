@@ -1,0 +1,28 @@
+<!-- Main Layout Template - Responsive -->
+<div class="flex min-h-screen bg-slate-50 dark:bg-slate-900">
+    <!-- Sidebar (Desktop & Tablet: visible, Mobile: hidden by default) -->
+    <div class="hidden md:block flex-shrink-0">
+        <app-sidebar [isMobileOpen]="false" (closeMobile)="closeMobileSidebar()">
+        </app-sidebar>
+    </div>
+
+    <!-- Mobile Sidebar (Drawer) -->
+    <div class="md:hidden">
+        <app-sidebar [isMobileOpen]="isMobileSidebarOpen" (closeMobile)="closeMobileSidebar()">
+        </app-sidebar>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- Header -->
+        <app-header (toggleMobile)="toggleMobileSidebar()"></app-header>
+
+        <!-- Page Content (with bottom padding on mobile for bottom tabs) -->
+        <main class="flex-1 overflow-y-auto pb-20 md:pb-0">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>
+
+<!-- Mobile Bottom Tabs (Shared across all pages) -->
+<app-bottom-tabs (onFabClick)="onFabClick()"></app-bottom-tabs>

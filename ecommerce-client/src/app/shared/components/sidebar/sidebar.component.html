@@ -1,0 +1,119 @@
+<!-- ==============================================
+     sidebar.component.html
+     Responsive Sidebar - Full / Icon-Only / Mobile
+     ============================================== -->
+
+<!-- Mobile Overlay -->
+<div *ngIf="isMobileOpen && isMobile"
+    class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity md:hidden" (click)="closeMobile.emit()">
+</div>
+
+<!-- Sidebar Container -->
+<aside [ngClass]="{
+         'w-72': !shouldShowIconOnly && !isMobile,
+         'w-[72px]': shouldShowIconOnly && !isMobile,
+         '-translate-x-full': isMobile && !isMobileOpen && !isRtl,
+         'translate-x-full': isMobile && !isMobileOpen && isRtl,
+         'translate-x-0': isMobile && isMobileOpen,
+         'w-72 fixed inset-y-0 start-0 z-50': isMobile
+       }" class="flex flex-col bg-gradient-to-b from-[#1e293b] to-[#0f172a] transition-all duration-300 h-full">
+
+    <!-- Logo Area -->
+    <div class="flex items-center h-16 px-4 border-b border-white/5"
+        [ngClass]="{ 'justify-center': shouldShowIconOnly && !isMobile }">
+        <div class="flex items-center gap-3">
+            <!-- Logo Icon -->
+            <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white shadow-lg">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+            </div>
+            <!-- Logo Text (hidden when collapsed) -->
+            <span *ngIf="!shouldShowIconOnly || isMobile" class="text-lg font-bold text-white whitespace-nowrap">
+                ERP Admin
+            </span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto py-4 px-3 scrollbar-hide">
+        <div *ngFor="let group of menuGroups" class="mb-6">
+            <!-- Group Title (hidden when collapsed) -->
+            <h3 *ngIf="!shouldShowIconOnly || isMobile"
+                class="px-3 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                {{ group.title | translate }}
+            </h3>
+
+            <!-- Separator for icon-only mode -->
+            <div *ngIf="shouldShowIconOnly && !isMobile" class="h-px bg-white/10 mx-2 mb-3"></div>
+
+            <ul class="space-y-1">
+                <li *ngFor="let item of group.items">
+                    <a [routerLink]="item.route" routerLinkActive="bg-indigo-500/20 text-white"
+                        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }" class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 
+                              hover:text-white hover:bg-white/5 transition-all duration-200 group"
+                        [ngClass]="{ 'justify-center': shouldShowIconOnly && !isMobile }"
+                        [attr.title]="shouldShowIconOnly && !isMobile ? (item.label | translate) : null">
+
+                        <!-- Active Indicator -->
+                        <div class="absolute inset-y-1 start-0 w-1 bg-indigo-500 rounded-full opacity-0 scale-y-0 
+                                    transition-all duration-200" routerLinkActive="!opacity-100 !scale-y-100">
+                        </div>
+
+                        <!-- Icon -->
+                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 
+                                    group-hover:bg-indigo-500/20 transition-colors"
+                            routerLinkActive="!bg-indigo-500/30">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    [attr.d]="item.icon" />
+                            </svg>
+                        </div>
+
+                        <!-- Label (hidden when collapsed) -->
+                        <span *ngIf="!shouldShowIconOnly || isMobile" class="truncate">
+                            {{ item.label | translate }}
+                        </span>
+
+                        <!-- Badge -->
+                        <span *ngIf="item.badge && (!shouldShowIconOnly || isMobile)"
+                            class="ms-auto px-2 py-0.5 text-[10px] font-bold text-white bg-indigo-500 rounded-full">
+                            {{ item.badge }}
+                        </span>
+
+                        <!-- Badge Dot for collapsed mode -->
+                        <span *ngIf="item.badge && shouldShowIconOnly && !isMobile"
+                            class="absolute top-1 end-1 w-2 h-2 bg-indigo-500 rounded-full">
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- User Section (only in full/mobile mode) -->
+    <div *ngIf="!shouldShowIconOnly || isMobile" class="p-4 border-t border-white/5">
+        <div
+            class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+            <div
+                class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center">
+                <span class="text-sm font-bold text-white">AM</span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-white truncate">Alex Morgan</p>
+                <p class="text-xs text-slate-400">Admin</p>
+            </div>
+            <i class="fas fa-sign-out-alt text-slate-500 hover:text-white transition-colors"></i>
+        </div>
+    </div>
+
+    <!-- Compact User (collapsed mode) -->
+    <div *ngIf="shouldShowIconOnly && !isMobile" class="p-3 border-t border-white/5 flex justify-center">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-indigo-400/50 transition-all"
+            title="Alex Morgan">
+            <span class="text-sm font-bold text-white">AM</span>
+        </div>
+    </div>
+</aside>

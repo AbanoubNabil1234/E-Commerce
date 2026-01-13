@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/notifications/notifications.routes.ts"],
+  "sourcesContent": ["import { Routes } from '@angular/router';\r\n\r\nexport const NOTIFICATIONS_ROUTES: Routes = [\r\n    {\r\n        path: '',\r\n        loadComponent: () => import('./pages/notifications-list/notifications-list.component')\r\n            .then(m => m.NotificationsListComponent),\r\n        title: 'Notifications'\r\n    }\r\n];\r\n"],
+  "mappings": ";;;AAEO,IAAM,uBAA+B;EACxC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAyD,EAChF,KAAK,OAAK,EAAE,0BAA0B;IAC3C,OAAO;;;",
+  "names": []
+}

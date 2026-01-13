@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/warehouses/warehouses.routes.ts"],
+  "sourcesContent": ["// warehouses.routes.ts\r\nimport { Routes } from '@angular/router';\r\nimport { permissionGuard } from '../../core/guards/permission.guard';\r\n\r\nexport const WAREHOUSES_ROUTES: Routes = [\r\n    {\r\n        path: '',\r\n        loadComponent: () => import('./pages/warehouse-list/warehouse-list.component').then(m => m.WarehouseListComponent),\r\n        canActivate: [permissionGuard],\r\n        data: { permission: 'Warehouses.View' }\r\n    },\r\n    {\r\n        path: 'create',\r\n        loadComponent: () => import('./pages/warehouse-form/warehouse-form.component').then(m => m.WarehouseFormComponent),\r\n        canActivate: [permissionGuard],\r\n        data: { permission: 'Warehouses.Manage' }\r\n    },\r\n    {\r\n        path: ':id/edit',\r\n        loadComponent: () => import('./pages/warehouse-form/warehouse-form.component').then(m => m.WarehouseFormComponent),\r\n        canActivate: [permissionGuard],\r\n        data: { permission: 'Warehouses.Manage' }\r\n    }\r\n];\r\n"],
+  "mappings": ";;;;;;;;;AAIO,IAAM,oBAA4B;EACrC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAiD,EAAE,KAAK,OAAK,EAAE,sBAAsB;IACjH,aAAa,CAAC,eAAe;IAC7B,MAAM,EAAE,YAAY,kBAAiB;;EAEzC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAiD,EAAE,KAAK,OAAK,EAAE,sBAAsB;IACjH,aAAa,CAAC,eAAe;IAC7B,MAAM,EAAE,YAAY,oBAAmB;;EAE3C;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAiD,EAAE,KAAK,OAAK,EAAE,sBAAsB;IACjH,aAAa,CAAC,eAAe;IAC7B,MAAM,EAAE,YAAY,oBAAmB;;;",
+  "names": []
+}

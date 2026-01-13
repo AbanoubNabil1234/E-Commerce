@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/shipments/shipments.routes.ts"],
+  "sourcesContent": ["import { Routes } from '@angular/router';\r\n\r\nexport const shipmentsRoutes: Routes = [\r\n    {\r\n        path: '',\r\n        loadComponent: () => import('./pages/shipment-list/shipment-list.component')\r\n            .then(m => m.ShipmentListComponent),\r\n        title: 'Shipments'\r\n    },\r\n    {\r\n        path: 'create',\r\n        loadComponent: () => import('./pages/shipment-create/shipment-create.component')\r\n            .then(m => m.ShipmentCreateComponent),\r\n        title: 'Create Shipment'\r\n    },\r\n    {\r\n        path: ':id',\r\n        loadComponent: () => import('./pages/shipment-detail/shipment-detail.component')\r\n            .then(m => m.ShipmentDetailComponent),\r\n        title: 'Shipment Details'\r\n    }\r\n];\r\n"],
+  "mappings": ";;;AAEO,IAAM,kBAA0B;EACnC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAA+C,EACtE,KAAK,OAAK,EAAE,qBAAqB;IACtC,OAAO;;EAEX;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAmD,EAC1E,KAAK,OAAK,EAAE,uBAAuB;IACxC,OAAO;;EAEX;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAmD,EAC1E,KAAK,OAAK,EAAE,uBAAuB;IACxC,OAAO;;;",
+  "names": []
+}

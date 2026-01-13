@@ -1,0 +1,13 @@
+/* Login Component Styles */
+/* Using Tailwind for most styling, this is for any custom overrides */
+
+:host {
+    display: block;
+}
+
+/* Focus states for accessibility */
+input:focus {
+    outline: none;
+}
+
+/* RTL adjustments handled via Tailwind's start/end utilities */

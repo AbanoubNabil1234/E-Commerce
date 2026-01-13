@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/shipments/models/shipment-status.enum.ts"],
+  "sourcesContent": ["export enum ShipmentStatus {\r\n    Pending = 'Pending',\r\n    Assigned = 'Assigned',\r\n    LabelCreated = 'LabelCreated',\r\n    PickedUp = 'PickedUp',\r\n    InTransit = 'InTransit',\r\n    OutForDelivery = 'OutForDelivery',\r\n    Delivered = 'Delivered',\r\n    Delayed = 'Delayed',\r\n    Failed = 'Failed',\r\n    Returned = 'Returned',\r\n    Cancelled = 'Cancelled'\r\n}\r\n"],
+  "mappings": ";AAAA,IAAY;CAAZ,SAAYA,iBAAc;AACtB,EAAAA,gBAAA,SAAA,IAAA;AACA,EAAAA,gBAAA,UAAA,IAAA;AACA,EAAAA,gBAAA,cAAA,IAAA;AACA,EAAAA,gBAAA,UAAA,IAAA;AACA,EAAAA,gBAAA,WAAA,IAAA;AACA,EAAAA,gBAAA,gBAAA,IAAA;AACA,EAAAA,gBAAA,WAAA,IAAA;AACA,EAAAA,gBAAA,SAAA,IAAA;AACA,EAAAA,gBAAA,QAAA,IAAA;AACA,EAAAA,gBAAA,UAAA,IAAA;AACA,EAAAA,gBAAA,WAAA,IAAA;AACJ,GAZY,mBAAA,iBAAc,CAAA,EAAA;",
+  "names": ["ShipmentStatus"]
+}

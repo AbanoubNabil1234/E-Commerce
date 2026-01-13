@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/dashboard/dashboard.routes.ts"],
+  "sourcesContent": ["// Dashboard Feature Routes - Now loads Analytics Dashboard\r\nimport { Routes } from '@angular/router';\r\n\r\nexport const DASHBOARD_ROUTES: Routes = [\r\n    {\r\n        path: '',\r\n        loadComponent: () => import('../analytics/pages/analytics-dashboard/analytics-dashboard.component')\r\n            .then(m => m.AnalyticsDashboardComponent)\r\n    },\r\n];\r\n"],
+  "mappings": ";;;AAGO,IAAM,mBAA2B;EACpC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAsE,EAC7F,KAAK,OAAK,EAAE,2BAA2B;;;",
+  "names": []
+}

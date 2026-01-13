@@ -1,0 +1,15 @@
+// ==============================================
+// auth-layout.component.ts
+// ==============================================
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+@Component({
+    selector: 'app-auth-layout',
+    standalone: true,
+    imports: [RouterModule],
+    templateUrl: './auth-layout.component.html',
+})
+export class AuthLayoutComponent {
+    // Minimal layout for auth pages (login, register)
+}

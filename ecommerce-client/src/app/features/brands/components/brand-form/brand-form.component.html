@@ -1,0 +1,168 @@
+<div class="bg-white rounded-lg px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+    <div class="sm:flex sm:items-start">
+        <div class="mt-3 text-center sm:mt-0 sm:ms-4 sm:text-start w-full">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-lg leading-6 font-bold text-gray-900 tracking-tight" id="modal-title">
+                    {{ isEditMode ? ('BRANDS.EDIT_BRAND' | translate) : ('BRANDS.ADD_NEW_BRAND' | translate) }}
+                </h3>
+                <button type="button"
+                    class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200"
+                    (click)="onCancel()">
+                    <span class="sr-only">{{ 'COMMON.CLOSE' | translate }}</span>
+                    <svg class="h-6 w-6 transform hover:rotate-90 transition-transform duration-200" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
+
+                <!-- Language Tabs -->
+                <div class="mb-6">
+                    <div class="border-b border-gray-200">
+                        <nav class="flex -mb-px" aria-label="Language Tabs">
+                            <button type="button" (click)="setActiveLanguage('en')"
+                                class="w-1/2 py-3 px-1 text-center border-b-2 font-medium text-sm transition-colors"
+                                [ngClass]="activeLanguage === 'en' 
+                                    ? 'border-blue-500 text-blue-600' 
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+                                <span class="flex items-center justify-center gap-2">
+                                    🇺🇸 English
+                                    <span *ngIf="getTranslation('en').invalid && getTranslation('en').touched"
+                                        class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                </span>
+                            </button>
+                            <button type="button" (click)="setActiveLanguage('ar')"
+                                class="w-1/2 py-3 px-1 text-center border-b-2 font-medium text-sm transition-colors"
+                                [ngClass]="activeLanguage === 'ar' 
+                                    ? 'border-blue-500 text-blue-600' 
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+                                <span class="flex items-center justify-center gap-2">
+                                    🇸🇦 العربية
+                                    <span *ngIf="getTranslation('ar').invalid && getTranslation('ar').touched"
+                                        class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                </span>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- English Tab Content -->
+                <div *ngIf="activeLanguage === 'en'" [formGroup]="getTranslation('en')" class="space-y-4">
+                    <div>
+                        <label for="name_en" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ 'BRANDS.BRAND_NAME' | translate }} (English) *
+                        </label>
+                        <input type="text" id="name_en" formControlName="name" class="input-premium" dir="ltr"
+                            [class.border-red-300]="getTranslation('en').get('name')?.invalid && getTranslation('en').get('name')?.touched"
+                            placeholder="e.g. Samsung">
+                        <div
+                            *ngIf="getTranslation('en').get('name')?.invalid && getTranslation('en').get('name')?.touched">
+                            <p class="mt-1 text-xs text-red-600">{{ 'VALIDATION.BRAND.NAME_REQUIRED' | translate }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="desc_en" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ 'BRANDS.BRAND_DESCRIPTION' | translate }} (English)
+                        </label>
+                        <textarea id="desc_en" rows="3" formControlName="description" class="input-premium" dir="ltr"
+                            placeholder="Enter brand description..."></textarea>
+                        <p class="mt-1 text-xs text-gray-500 text-end">
+                            {{ getTranslation('en').get('description')?.value?.length || 0 }} / 500
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Arabic Tab Content -->
+                <div *ngIf="activeLanguage === 'ar'" [formGroup]="getTranslation('ar')" class="space-y-4">
+                    <div>
+                        <label for="name_ar" class="block text-sm font-medium text-gray-700 mb-1 text-right">
+                            {{ 'BRANDS.BRAND_NAME' | translate }} (العربية)
+                        </label>
+                        <input type="text" id="name_ar" formControlName="name" class="input-premium text-right"
+                            dir="rtl" placeholder="مثال: سامسونج">
+                    </div>
+                    <div>
+                        <label for="desc_ar" class="block text-sm font-medium text-gray-700 mb-1 text-right">
+                            {{ 'BRANDS.BRAND_DESCRIPTION' | translate }} (العربية)
+                        </label>
+                        <textarea id="desc_ar" rows="3" formControlName="description" class="input-premium text-right"
+                            dir="rtl" placeholder="أدخل وصف العلامة التجارية..."></textarea>
+                        <p class="mt-1 text-xs text-gray-500 text-start">
+                            {{ getTranslation('ar').get('description')?.value?.length || 0 }} / 500
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Shared Fields Section -->
+                <div class="mt-6 pt-4 border-t border-gray-100 space-y-4">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">{{ 'COMMON.SETTINGS' |
+                        translate }}</p>
+
+                    <!-- Slug -->
+                    <div>
+                        <label for="slug" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ 'BRANDS.BRAND_SLUG' | translate }} *
+                        </label>
+                        <input type="text" id="slug" formControlName="slug"
+                            class="input-premium bg-gray-50 text-gray-500" readonly
+                            [placeholder]="'BRANDS.PLACEHOLDER_NAME' | translate">
+                    </div>
+
+                    <!-- Active Toggle -->
+                    <div
+                        class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100 transition-colors hover:border-blue-100">
+                        <span class="flex-grow flex flex-col items-start">
+                            <span class="text-sm font-medium text-gray-900">{{ 'BRANDS.ACTIVE_STATUS' | translate
+                                }}</span>
+                            <span class="text-sm text-gray-500">{{ 'BRANDS.ACTIVE_STATUS_DESC' | translate }}</span>
+                        </span>
+                        <button type="button" (click)="toggleActive()"
+                            class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            [ngClass]="brandForm.get('isActive')?.value ? 'bg-blue-600' : 'bg-gray-200'">
+                            <span class="sr-only">{{ 'COMMON.STATUS' | translate }}</span>
+                            <span aria-hidden="true"
+                                class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                                [ngClass]="brandForm.get('isActive')?.value ? 'translate-x-5 rtl:-translate-x-5' : 'translate-x-0'"></span>
+                        </button>
+                    </div>
+
+                    <!-- Logo Upload Placeholder -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'BRANDS.BRAND_LOGO' | translate
+                            }}</label>
+                        <div
+                            class="group flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 cursor-pointer">
+                            <div class="space-y-1 text-center">
+                                <div
+                                    class="mx-auto h-12 w-12 text-blue-500 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all duration-300">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                </div>
+                                <div class="flex text-sm text-gray-600 justify-center">
+                                    <span class="font-medium text-blue-600">{{ 'BRANDS.UPLOAD_LOGO' | translate
+                                        }}</span>
+                                    <span class="ps-1">{{ 'BRANDS.DRAG_DROP' | translate }}</span>
+                                </div>
+                                <p class="text-xs text-gray-500">{{ 'BRANDS.FILE_TYPES' | translate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg border-t border-gray-100">
+    <button type="button" (click)="onSubmit()" [disabled]="brandForm.invalid"
+        class="w-full sm:w-auto sm:ms-3 btn-primary shadow-lg shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ isEditMode ? ('BRANDS.UPDATE_BRAND' | translate) : ('BRANDS.CREATE_BRAND' | translate) }}
+    </button>
+    <button type="button" class="mt-3 w-full sm:w-auto sm:mt-0 sm:ms-3 btn-secondary" (click)="onCancel()">
+        {{ 'COMMON.CANCEL' | translate }}
+    </button>
+</div>

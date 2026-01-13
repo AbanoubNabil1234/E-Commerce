@@ -1,0 +1,449 @@
+<!-- ==============================================
+     Create Category Page - Enterprise ERP Style
+     Matching Reference Images (Desktop/Tablet/Mobile)
+     ============================================== -->
+
+<div [attr.dir]="dir" class="min-h-full bg-slate-50">
+
+    <!-- ==================== DESKTOP/TABLET VIEW ==================== -->
+    <div class="hidden md:block p-6 lg:p-8 space-y-6">
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-sm text-slate-500">
+            <a routerLink="/dashboard" class="hover:text-indigo-600 transition-colors">
+                {{ 'COMMON.HOME' | translate }}
+            </a>
+            <i class="fas fa-chevron-right text-xs text-slate-300 rtl:rotate-180"></i>
+            <a routerLink="/categories" class="hover:text-indigo-600 transition-colors">
+                {{ 'CATEGORIES.TITLE' | translate }}
+            </a>
+            <i class="fas fa-chevron-right text-xs text-slate-300 rtl:rotate-180"></i>
+            <span class="text-slate-800 font-medium">{{ pageTitle | translate }}</span>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">
+                    {{ pageTitle | translate }}
+                </h1>
+                <p class="mt-1 text-sm text-slate-500">
+                    {{ (isEditMode ? 'CATEGORIES.EDIT_SUBTITLE' : 'CATEGORIES.CREATE_SUBTITLE') | translate }}
+                </p>
+            </div>
+
+            <!-- Back Button -->
+            <button (click)="onCancel()" type="button"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all">
+                <i class="fas fa-arrow-left rtl:rotate-180"></i>
+                {{ 'CATEGORIES.BACK_TO_LIST' | translate }}
+            </button>
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+
+                <!-- General Information Section -->
+                <div class="p-6 lg:p-8 border-b border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
+                                <i class="fas fa-info-circle text-indigo-600"></i>
+                            </div>
+                            <h2 class="text-lg font-semibold text-slate-800">{{ 'CATEGORIES.GENERAL_INFO' | translate }}
+                            </h2>
+                        </div>
+
+                        <!-- Language Tabs -->
+                        <div class="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-white">
+                            <button type="button" (click)="setActiveTab('en')"
+                                class="px-4 py-2 text-sm font-medium transition-all flex items-center gap-2"
+                                [class.bg-indigo-600]="activeTab === 'en'" [class.text-white]="activeTab === 'en'"
+                                [class.text-slate-600]="activeTab !== 'en'"
+                                [class.hover:bg-slate-50]="activeTab !== 'en'">
+                                <span class="text-xs">US</span> English
+                            </button>
+                            <button type="button" (click)="setActiveTab('ar')"
+                                class="px-4 py-2 text-sm font-medium transition-all flex items-center gap-2"
+                                [class.bg-indigo-600]="activeTab === 'ar'" [class.text-white]="activeTab === 'ar'"
+                                [class.text-slate-600]="activeTab !== 'ar'"
+                                [class.hover:bg-slate-50]="activeTab !== 'ar'">
+                                <span class="text-xs">SA</span> العربية
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- English Tab Content -->
+                    <div *ngIf="activeTab === 'en'" class="space-y-6">
+                        <!-- Category Name (English) -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">
+                                {{ 'CATEGORIES.CATEGORY_NAME' | translate }} (English)
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" [formControl]="nameEnControl" (blur)="generateSlug()"
+                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                [class.border-red-300]="nameEnControl.invalid && nameEnControl.touched"
+                                placeholder="e.g. Summer Collection" dir="ltr">
+                            <p *ngIf="nameEnControl.invalid && nameEnControl.touched" class="mt-1 text-xs text-red-500">
+                                {{ 'VALIDATION.required' | translate }}
+                            </p>
+                        </div>
+
+                        <!-- Category Description (English) -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">
+                                {{ 'CATEGORIES.CATEGORY_DESCRIPTION' | translate }} (English)
+                            </label>
+                            <textarea [formControl]="descEnControl" rows="3"
+                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
+                                placeholder="Describe this category..." dir="ltr"></textarea>
+                            <p class="mt-1 text-xs text-slate-400 text-end">
+                                {{ descEnControl.value?.length || 0 }} / 500 {{ 'COMMON.CHARACTERS' | translate }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Arabic Tab Content -->
+                    <div *ngIf="activeTab === 'ar'" class="space-y-6">
+                        <!-- Category Name (Arabic) -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2 text-right">
+                                {{ 'CATEGORIES.CATEGORY_NAME' | translate }} (العربية)
+                            </label>
+                            <input type="text" [formControl]="nameArControl"
+                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-right"
+                                placeholder="مثال: مجموعة الصيف" dir="rtl">
+                        </div>
+
+                        <!-- Category Description (Arabic) -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2 text-right">
+                                {{ 'CATEGORIES.CATEGORY_DESCRIPTION' | translate }} (العربية)
+                            </label>
+                            <textarea [formControl]="descArControl" rows="3"
+                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none text-right"
+                                placeholder="صف هذه الفئة..." dir="rtl"></textarea>
+                            <p class="mt-1 text-xs text-slate-400 text-start">
+                                {{ descArControl.value?.length || 0 }} / 500 {{ 'COMMON.CHARACTERS' | translate }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slug & Parent - Two Column -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                        <!-- Slug -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-sm font-medium text-slate-700">
+                                    {{ 'CATEGORIES.CATEGORY_SLUG' | translate }}
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <span class="text-xs text-indigo-600 flex items-center gap-1">
+                                    <i class="fas fa-magic"></i>
+                                    {{ 'COMMON.AUTO_GENERATED' | translate }}
+                                </span>
+                            </div>
+                            <div class="relative">
+                                <input type="text" formControlName="slug"
+                                    class="w-full px-4 py-3 pe-12 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                    [class.border-red-300]="categoryForm.get('slug')?.invalid && categoryForm.get('slug')?.touched"
+                                    placeholder="auto-generated-slug" dir="ltr">
+                                <button type="button" (click)="regenerateSlug()"
+                                    class="absolute end-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
+                                    title="{{ 'COMMON.REGENERATE' | translate }}">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <p class="mt-1 text-xs text-slate-400">
+                                {{ 'CATEGORIES.SLUG_HELPER' | translate }}
+                            </p>
+                        </div>
+
+                        <!-- Parent Category -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">
+                                {{ 'CATEGORIES.PARENT_CATEGORY' | translate }}
+                            </label>
+                            <div class="relative">
+                                <select formControlName="parentId"
+                                    class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none cursor-pointer">
+                                    <option [ngValue]="null">{{ 'CATEGORIES.NO_PARENT' | translate }}</option>
+                                    <option *ngFor="let parent of parents" [ngValue]="parent.id">
+                                        {{ parent.name }}
+                                    </option>
+                                </select>
+                                <i
+                                    class="fas fa-chevron-down absolute end-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Image Section -->
+                <div class="p-6 lg:p-8 border-b border-slate-100">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+                            <i class="fas fa-image text-purple-600"></i>
+                        </div>
+                        <h2 class="text-lg font-semibold text-slate-800">{{ 'CATEGORIES.CATEGORY_IMAGE' | translate }}
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Image Preview (if exists) -->
+                        <div *ngIf="imagePreview" class="lg:col-span-1">
+                            <div
+                                class="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50 aspect-square">
+                                <img [src]="imagePreview" alt="Preview" class="w-full h-full object-cover">
+                                <button type="button" (click)="removeImage()"
+                                    class="absolute top-2 end-2 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Upload Area -->
+                        <div [class.lg:col-span-2]="imagePreview" [class.lg:col-span-3]="!imagePreview">
+                            <div (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                                (drop)="onDrop($event)" (click)="fileInput.click()"
+                                class="relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all"
+                                [class.border-indigo-400]="isDragging" [class.bg-indigo-50]="isDragging"
+                                [class.border-slate-200]="!isDragging" [class.hover:border-indigo-300]="!isDragging"
+                                [class.hover:bg-slate-50]="!isDragging">
+                                <input type="file" #fileInput (change)="onImageSelect($event)" accept="image/*"
+                                    class="hidden">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center mb-4">
+                                        <i class="fas fa-cloud-upload-alt text-2xl text-indigo-600"></i>
+                                    </div>
+                                    <p class="text-sm text-slate-700 font-medium mb-1">
+                                        {{ 'CATEGORIES.CLICK_TO_UPLOAD' | translate }}
+                                    </p>
+                                    <p class="text-xs text-slate-400">
+                                        SVG, PNG, JPG or GIF (max 800x400px)
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-end mt-2">
+                                <span class="text-xs text-slate-400">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    {{ imagePreview ? 'Image selected' : 'No image set' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Status -->
+                <div class="p-6 lg:p-8 border-b border-slate-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                                <i class="fas fa-toggle-on text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-semibold text-slate-800">{{ 'CATEGORIES.CATEGORY_STATUS' |
+                                    translate }}</h2>
+                                <p class="text-sm text-slate-500">{{ 'CATEGORIES.STATUS_HELPER' | translate }}</p>
+                            </div>
+                        </div>
+
+                        <button type="button" (click)="toggleActive()"
+                            class="relative inline-flex items-center h-7 rounded-full w-14 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            [class.bg-indigo-600]="categoryForm.get('isActive')?.value"
+                            [class.bg-slate-200]="!categoryForm.get('isActive')?.value">
+                            <span
+                                class="inline-block w-5 h-5 transform bg-white rounded-full shadow transition-transform"
+                                [class.translate-x-8]="categoryForm.get('isActive')?.value"
+                                [class.translate-x-1]="!categoryForm.get('isActive')?.value"
+                                [class.rtl:-translate-x-8]="categoryForm.get('isActive')?.value && dir === 'rtl'"
+                                [class.rtl:-translate-x-1]="!categoryForm.get('isActive')?.value && dir === 'rtl'"></span>
+                            <span class="ms-2 text-sm font-medium"
+                                [class.text-white]="categoryForm.get('isActive')?.value"
+                                [class.text-slate-600]="!categoryForm.get('isActive')?.value">
+                                {{ (categoryForm.get('isActive')?.value ? 'COMMON.ACTIVE' : 'COMMON.INACTIVE') |
+                                translate }}
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="p-6 lg:p-8 bg-slate-50 flex items-center justify-end gap-3">
+                    <button type="button" (click)="onCancel()"
+                        class="px-6 py-3 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all">
+                        {{ 'COMMON.CANCEL' | translate }}
+                    </button>
+                    <button type="submit" [disabled]="isSubmitting"
+                        class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                        <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+                        <i class="fas fa-plus" *ngIf="!isSubmitting"></i>
+                        {{ 'CATEGORIES.CREATE_CATEGORY' | translate }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MOBILE VIEW ==================== -->
+    <div class="md:hidden min-h-screen flex flex-col bg-slate-50">
+
+        <!-- Mobile Header -->
+        <div class="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <button (click)="onCancel()" type="button" class="p-2 -ms-2 text-slate-600">
+                    <i class="fas fa-arrow-left rtl:rotate-180"></i>
+                </button>
+                <h1 class="text-lg font-bold text-slate-800">{{ 'CATEGORIES.CREATE_CATEGORY' | translate }}</h1>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">{{ 'COMMON.HOME' | translate }} > {{ 'CATEGORIES.TITLE' | translate
+                }} > {{ 'COMMON.CREATE' | translate }}</p>
+        </div>
+
+        <!-- Mobile Form Content -->
+        <div class="flex-1 overflow-y-auto p-4 pb-32">
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+                <!-- Language Tabs Card -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-slate-800">{{ 'CATEGORIES.GENERAL_INFO' | translate }}
+                        </h3>
+                        <!-- Mobile Language Tabs -->
+                        <div class="flex items-center rounded-lg border border-slate-200 overflow-hidden">
+                            <button type="button" (click)="setActiveTab('en')"
+                                class="px-3 py-1.5 text-xs font-medium transition-all"
+                                [class.bg-indigo-600]="activeTab === 'en'" [class.text-white]="activeTab === 'en'"
+                                [class.text-slate-600]="activeTab !== 'en'">
+                                EN
+                            </button>
+                            <button type="button" (click)="setActiveTab('ar')"
+                                class="px-3 py-1.5 text-xs font-medium transition-all"
+                                [class.bg-indigo-600]="activeTab === 'ar'" [class.text-white]="activeTab === 'ar'"
+                                [class.text-slate-600]="activeTab !== 'ar'">
+                                AR
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- English Tab Content (Mobile) -->
+                    <div *ngIf="activeTab === 'en'" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">
+                                {{ 'CATEGORIES.CATEGORY_NAME' | translate }} (English)
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" [formControl]="nameEnControl" (blur)="generateSlug()"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                [class.border-red-300]="nameEnControl.invalid && nameEnControl.touched"
+                                placeholder="e.g. Electronics" dir="ltr">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">
+                                {{ 'CATEGORIES.CATEGORY_DESCRIPTION' | translate }} (English)
+                            </label>
+                            <textarea [formControl]="descEnControl" rows="3"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                                placeholder="Describe this category..." dir="ltr"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Arabic Tab Content (Mobile) -->
+                    <div *ngIf="activeTab === 'ar'" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2 text-right">
+                                {{ 'CATEGORIES.CATEGORY_NAME' | translate }} (العربية)
+                            </label>
+                            <input type="text" [formControl]="nameArControl"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right"
+                                placeholder="مثال: إلكترونيات" dir="rtl">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2 text-right">
+                                {{ 'CATEGORIES.CATEGORY_DESCRIPTION' | translate }} (العربية)
+                            </label>
+                            <textarea [formControl]="descArControl" rows="3"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none text-right"
+                                placeholder="صف هذه الفئة..." dir="rtl"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slug -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-sm font-medium text-slate-700">{{ 'CATEGORIES.CATEGORY_SLUG' | translate
+                            }}</label>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-100 text-indigo-700">
+                            {{ 'COMMON.AUTO_GENERATED' | translate }}
+                        </span>
+                    </div>
+                    <div class="relative">
+                        <input type="text" formControlName="slug"
+                            class="w-full px-4 py-3 pe-12 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="category-slug" dir="ltr">
+                        <button type="button" (click)="regenerateSlug()"
+                            class="absolute end-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Parent Category -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">{{ 'CATEGORIES.PARENT_CATEGORY' |
+                        translate }}</label>
+                    <div class="relative">
+                        <select formControlName="parentId"
+                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+                            <option [ngValue]="null">{{ 'CATEGORIES.CHOOSE_PARENT' | translate }}</option>
+                            <option *ngFor="let parent of parents" [ngValue]="parent.id">{{ parent.name }}</option>
+                        </select>
+                        <i
+                            class="fas fa-chevron-down absolute end-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <!-- Category Image -->
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-3">{{ 'CATEGORIES.CATEGORY_IMAGE' |
+                        translate }}</label>
+
+                    <div *ngIf="imagePreview" class="relative rounded-xl overflow-hidden mb-3 aspect-video">
+                        <img [src]="imagePreview" alt="Preview" class="w-full h-full object-cover">
+                        <button type="button" (click)="removeImage()"
+                            class="absolute top-2 end-2 p-2 bg-red-500 text-white rounded-lg">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div (click)="fileInputMobile.click()"
+                        class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer bg-indigo-50/50">
+                        <input type="file" #fileInputMobile (change)="onImageSelect($event)" accept="image/*"
+                            class="hidden">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-cloud-upload-alt text-xl text-indigo-600"></i>
+                        </div>
+                        <p class="text-sm text-indigo-600 font-medium">{{ 'CATEGORIES.TAP_TO_UPLOAD' | translate }}</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Mobile Bottom Actions -->
+        <div class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 p-4 space-y-2 z-40">
+            <button type="button" (click)="onSubmit()" [disabled]="isSubmitting"
+                class="w-full py-3.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+                <i class="fas fa-plus" *ngIf="!isSubmitting"></i>
+                {{ 'CATEGORIES.CREATE_CATEGORY' | translate }}
+            </button>
+            <button type="button" (click)="onCancel()" class="w-full py-3 text-slate-600 font-medium text-center">
+                {{ 'COMMON.CANCEL' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;bec1decfc12a5cda7b2c05534bdc4a7455493b89c29fbf1a61a446f3cbd4d544;D:/fullstack project/e-com/ecommerce-client/src/app/shared/components/confirm-modal/confirm-modal.component.ts"],
+  "sourcesContent": ["\n        .animate-fade-in {\n            animation: fadeIn 0.2s ease-out;\n        }\n\n        .animate-scale-in {\n            animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);\n        }\n\n        @keyframes fadeIn {\n            from { opacity: 0; }\n            to { opacity: 1; }\n        }\n\n        @keyframes scaleIn {\n            from {\n                opacity: 0;\n                transform: scale(0.95) translateY(10px);\n            }\n            to {\n                opacity: 1;\n                transform: scale(1) translateY(0);\n            }\n        }\n    "],
+  "mappings": ";AACQ,CAAC;AACG,aAAW,OAAO,KAAK;AAC3B;AAEA,CAAC;AACG,aAAW,QAAQ,KAAK,aAAa,IAAI,EAAE,CAAC,EAAE,GAAG,EAAE;AACvD;AAEA,WAPe;AAQX;AAAO,aAAS;AAAG;AACnB;AAAK,aAAS;AAAG;AACrB;AAEA,WARe;AASX;AACI,aAAS;AACT,eAAW,MAAM,MAAM,WAAW;AACtC;AACA;AACI,aAAS;AACT,eAAW,MAAM,GAAG,WAAW;AACnC;AACJ;",
+  "names": []
+}

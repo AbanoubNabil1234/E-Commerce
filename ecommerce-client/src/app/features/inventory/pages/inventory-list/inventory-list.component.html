@@ -1,0 +1,485 @@
+<!-- ==============================================
+     Inventory Management - Enterprise ERP Style
+     With Warehouse Grouping
+     ============================================== -->
+
+<div [attr.dir]="dir" class="min-h-full bg-slate-50">
+
+    <!-- ==================== DESKTOP/TABLET VIEW ==================== -->
+    <div class="hidden md:block p-6 lg:p-8 space-y-6">
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-sm text-slate-500">
+            <a routerLink="/dashboard" class="hover:text-indigo-600 transition-colors">
+                {{ 'COMMON.HOME' | translate }}
+            </a>
+            <i class="fas fa-chevron-right text-xs text-slate-300 rtl:rotate-180"></i>
+            <span class="text-slate-800 font-medium">{{ 'INVENTORY.TITLE' | translate }}</span>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">
+                    {{ 'INVENTORY.MANAGEMENT_TITLE' | translate }}
+                </h1>
+                <p class="mt-1 text-sm text-slate-500">
+                    {{ 'INVENTORY.MANAGEMENT_SUBTITLE' | translate }}
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-3">
+                <button type="button"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all">
+                    <i class="fas fa-download text-sm"></i>
+                    {{ 'COMMON.EXPORT' | translate }}
+                </button>
+                <a routerLink="/inventory/adjustments"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-0.5 active:scale-[0.98]">
+                    <i class="fas fa-exchange-alt"></i>
+                    {{ 'INVENTORY.STOCK_ADJUSTMENT' | translate }}
+                </a>
+            </div>
+        </div>
+
+        <!-- Toolbar: Search + Filters -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+                <!-- Search -->
+                <div class="relative flex-1 max-w-md">
+                    <i class="fas fa-search absolute start-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" [formControl]="searchControl"
+                        [placeholder]="'INVENTORY.SEARCH_PLACEHOLDER' | translate"
+                        class="w-full ps-11 pe-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all">
+                </div>
+
+                <!-- Warehouse Filter -->
+                <div class="relative">
+                    <select (change)="onWarehouseChange($event)"
+                        class="appearance-none px-4 py-2.5 pe-10 bg-slate-50 border border-slate-200 text-slate-700 font-medium rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer">
+                        <option value="">{{ 'INVENTORY.ALL_WAREHOUSES' | translate }}</option>
+                        <option *ngFor="let wh of warehouses()" [value]="wh.id">{{ wh.name }}</option>
+                    </select>
+                    <i
+                        class="fas fa-chevron-down absolute end-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="relative">
+                    <select (change)="onStatusChange($event)"
+                        class="appearance-none px-4 py-2.5 pe-10 bg-slate-50 border border-slate-200 text-slate-700 font-medium rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer">
+                        <option value="">{{ 'INVENTORY.ALL_STATUS' | translate }}</option>
+                        <option value="in_stock">{{ 'INVENTORY.STATUS_IN_STOCK' | translate }}</option>
+                        <option value="low_stock">{{ 'INVENTORY.STATUS_LOW_STOCK' | translate }}</option>
+                        <option value="out_of_stock">{{ 'INVENTORY.STATUS_OUT_OF_STOCK' | translate }}</option>
+                    </select>
+                    <i
+                        class="fas fa-chevron-down absolute end-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
+                </div>
+
+                <!-- Low Stock Toggle -->
+                <button type="button" (click)="onLowStockToggle()"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+                    [ngClass]="lowStockOnly 
+                        ? 'bg-amber-100 text-amber-700 border border-amber-200' 
+                        : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ 'INVENTORY.LOW_STOCK_ONLY' | translate }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading()" class="flex flex-col items-center justify-center py-24">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
+            <span class="text-sm text-slate-500">{{ 'COMMON.LOADING' | translate }}</span>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading() && stocks().length === 0"
+            class="bg-white rounded-xl border border-slate-200 shadow-sm p-12">
+            <div class="flex flex-col items-center justify-center text-center">
+                <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
+                    <i class="fas fa-boxes text-2xl text-slate-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-1">{{ 'INVENTORY.NO_STOCK_FOUND' | translate }}</h3>
+                <p class="text-sm text-slate-500 mb-6">{{ 'INVENTORY.EMPTY_DESC' | translate }}</p>
+            </div>
+        </div>
+
+        <!-- Data Tables Grouped by Warehouse -->
+        <div *ngIf="!isLoading() && stocksByWarehouse().length > 0" class="space-y-6">
+            <div *ngFor="let group of stocksByWarehouse()"
+                class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+
+                <!-- Warehouse Header -->
+                <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-warehouse text-indigo-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-800">{{ group.warehouseName }}</h3>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-full">
+                        {{ group.productCount }} {{ 'INVENTORY.PRODUCTS' | translate }}
+                    </span>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50/50 border-b border-slate-100">
+                                <th class="px-6 py-3 text-start">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        {{ 'INVENTORY.PRODUCT' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-3 text-start">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        SKU
+                                    </span>
+                                </th>
+                                <th class="px-6 py-3 text-center">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        {{ 'INVENTORY.ON_HAND' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-3 text-center">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        {{ 'INVENTORY.RESERVED' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-3 text-center">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        {{ 'INVENTORY.AVAILABLE' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-3 text-center">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        {{ 'INVENTORY.STATUS_LABEL' | translate }}
+                                    </span>
+                                </th>
+                                <th class="px-6 py-3 text-end">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        {{ 'COMMON.ACTIONS' | translate }}
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr *ngFor="let stock of group.stocks"
+                                class="hover:bg-slate-50 transition-colors duration-150">
+                                <td class="px-6 py-4">
+                                    <a [routerLink]="['/products', stock.productId]"
+                                        class="font-semibold text-slate-800 hover:text-indigo-600 transition-colors">
+                                        {{ stock.productName }}
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-sm font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                                        {{ stock.productSKU }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-sm font-bold text-slate-800">{{ stock.quantityOnHand }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-sm font-medium text-amber-600">{{ stock.quantityReserved }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-sm font-bold"
+                                        [class.text-emerald-600]="stock.quantityAvailable > (stock.reorderLevel ?? 0)"
+                                        [class.text-amber-600]="stock.quantityAvailable > 0 && stock.quantityAvailable <= (stock.reorderLevel ?? 0)"
+                                        [class.text-red-600]="stock.quantityAvailable <= 0">
+                                        {{ stock.quantityAvailable }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <app-stock-status-badge [quantityOnHand]="stock.quantityOnHand"
+                                        [reorderLevel]="stock.reorderLevel">
+                                    </app-stock-status-badge>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <a [routerLink]="['/products', stock.productId]"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                                            [title]="'COMMON.VIEW_DETAILS' | translate">
+                                            <i class="fas fa-eye text-xs"></i>
+                                        </a>
+                                        <button type="button" (click)="openAdjustDialog(stock, 'increase')"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all"
+                                            [title]="'INVENTORY.ACTIONS.INCREASE' | translate">
+                                            <i class="fas fa-plus text-xs"></i>
+                                        </button>
+                                        <button type="button" (click)="openAdjustDialog(stock, 'decrease')"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                            [title]="'INVENTORY.ACTIONS.DECREASE' | translate">
+                                            <i class="fas fa-minus text-xs"></i>
+                                        </button>
+                                        <button type="button" (click)="openTransferDialog(stock)"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                            [title]="'INVENTORY.TRANSFER_STOCK' | translate">
+                                            <i class="fas fa-exchange-alt text-xs"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="stocks().length > 0"
+            class="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-white rounded-xl border border-slate-200">
+            <div class="text-sm text-slate-600">
+                {{ 'COMMON.SHOWING' | translate }} <span class="font-semibold">{{ stocks().length }}</span>
+                {{ 'INVENTORY.ITEMS' | translate }}
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MOBILE VIEW ==================== -->
+    <div class="md:hidden min-h-screen flex flex-col bg-slate-50">
+
+        <!-- Mobile Header -->
+        <div class="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 py-3">
+            <h1 class="text-lg font-bold text-slate-800 mb-3">{{ 'INVENTORY.TITLE' | translate }}</h1>
+            <div class="flex items-center gap-3">
+                <div class="relative flex-1">
+                    <i class="fas fa-search absolute start-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" [formControl]="searchControl"
+                        [placeholder]="'INVENTORY.SEARCH_PLACEHOLDER' | translate"
+                        class="w-full ps-11 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="button" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-600">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="px-4 py-3 flex items-center gap-2 overflow-x-auto bg-white border-b border-slate-100">
+            <button type="button" class="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+                [ngClass]="!selectedWarehouseId ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600'">
+                {{ 'INVENTORY.ALL_WAREHOUSES' | translate }}
+            </button>
+            <button type="button" (click)="onLowStockToggle()"
+                class="flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+                [ngClass]="lowStockOnly ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'">
+                <i class="fas fa-exclamation-triangle me-1 text-xs"></i>
+                {{ 'INVENTORY.LOW_STOCK' | translate }}
+            </button>
+        </div>
+
+        <!-- Mobile Content -->
+        <div class="flex-1 overflow-y-auto p-4 pb-24 space-y-4">
+            <!-- Loading -->
+            <div *ngIf="isLoading()" class="flex justify-center py-12">
+                <div class="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!isLoading() && stocks().length === 0"
+                class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
+                    <i class="fas fa-boxes text-2xl text-slate-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-1">{{ 'INVENTORY.NO_STOCK_FOUND' | translate }}</h3>
+                <p class="text-sm text-slate-500">{{ 'INVENTORY.EMPTY_DESC' | translate }}</p>
+            </div>
+
+            <!-- Grouped by Warehouse -->
+            <div *ngFor="let group of stocksByWarehouse()" class="space-y-3">
+                <!-- Warehouse Section Header -->
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-warehouse text-indigo-600"></i>
+                        <span class="font-semibold text-slate-800">{{ group.warehouseName }}</span>
+                    </div>
+                    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
+                        {{ group.productCount }}
+                    </span>
+                </div>
+
+                <!-- Stock Cards -->
+                <div *ngFor="let stock of group.stocks"
+                    class="bg-white rounded-xl border border-slate-200 p-4 active:bg-slate-50 transition-colors">
+
+                    <!-- Header -->
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="min-w-0">
+                            <h3 class="font-semibold text-slate-800 truncate">{{ stock.productName }}</h3>
+                            <span class="text-xs font-mono text-slate-500">{{ stock.productSKU }}</span>
+                        </div>
+                        <app-stock-status-badge [quantityOnHand]="stock.quantityOnHand"
+                            [reorderLevel]="stock.reorderLevel">
+                        </app-stock-status-badge>
+                    </div>
+
+                    <!-- Stock Metrics -->
+                    <div class="grid grid-cols-3 gap-2 py-3 border-t border-b border-slate-100">
+                        <div class="text-center">
+                            <span class="block text-xs text-slate-400 uppercase tracking-wider mb-1">{{
+                                'INVENTORY.ON_HAND' | translate }}</span>
+                            <span class="text-lg font-bold text-slate-800">{{ stock.quantityOnHand }}</span>
+                        </div>
+                        <div class="text-center border-l border-r border-slate-100">
+                            <span class="block text-xs text-slate-400 uppercase tracking-wider mb-1">{{
+                                'INVENTORY.RESERVED' | translate }}</span>
+                            <span class="text-lg font-medium text-amber-600">{{ stock.quantityReserved }}</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="block text-xs text-slate-400 uppercase tracking-wider mb-1">{{
+                                'INVENTORY.AVAILABLE' | translate }}</span>
+                            <span class="text-lg font-bold"
+                                [class.text-emerald-600]="stock.quantityAvailable > (stock.reorderLevel ?? 0)"
+                                [class.text-amber-600]="stock.quantityAvailable > 0 && stock.quantityAvailable <= (stock.reorderLevel ?? 0)"
+                                [class.text-red-600]="stock.quantityAvailable <= 0">
+                                {{ stock.quantityAvailable }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between mt-3">
+                        <a [routerLink]="['/products', stock.productId]" class="text-sm font-medium text-indigo-600">
+                            {{ 'COMMON.VIEW_DETAILS' | translate }} →
+                        </a>
+                        <div class="flex items-center gap-1">
+                            <button type="button" (click)="openAdjustDialog(stock, 'increase')"
+                                class="p-2 text-slate-400 hover:text-emerald-600 rounded-lg">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                            <button type="button" (click)="openAdjustDialog(stock, 'decrease')"
+                                class="p-2 text-slate-400 hover:text-red-600 rounded-lg">
+                                <i class="fas fa-minus text-sm"></i>
+                            </button>
+                            <button type="button" (click)="openTransferDialog(stock)"
+                                class="p-2 text-slate-400 hover:text-blue-600 rounded-lg">
+                                <i class="fas fa-exchange-alt text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile FAB -->
+        <a routerLink="/inventory/adjustments"
+            class="fixed bottom-6 end-6 w-14 h-14 bg-indigo-600 text-white rounded-2xl shadow-lg shadow-indigo-300 flex items-center justify-center hover:bg-indigo-700 active:scale-95 transition-all z-50">
+            <i class="fas fa-exchange-alt text-lg"></i>
+        </a>
+    </div>
+
+    <!-- ==================== ADJUST STOCK DIALOG ==================== -->
+    <app-adjust-stock-dialog [isOpen]="adjustDialogOpen" [productName]="adjustDialogStock?.productName ?? ''"
+        [currentQuantity]="adjustDialogStock?.quantityOnHand ?? 0" [type]="adjustDialogType"
+        [isSubmitting]="adjustDialogSubmitting" (onClose)="closeAdjustDialog()"
+        (onConfirm)="confirmAdjustStock($event)">
+    </app-adjust-stock-dialog>
+
+    <!-- ==================== TRANSFER STOCK DIALOG ==================== -->
+    <div *ngIf="transferDialogOpen" class="fixed inset-0 z-50 overflow-y-auto">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" (click)="closeTransferDialog()"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-lg">
+                <!-- Header -->
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-exchange-alt text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-800">{{ 'INVENTORY.TRANSFER_STOCK' | translate }}</h3>
+                            <p class="text-sm text-slate-500">{{ transferDialogStock?.productName }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="p-6 space-y-5">
+                    <!-- Source Warehouse (Read-only) -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                            {{ 'INVENTORY.FROM_WAREHOUSE' | translate }}
+                        </label>
+                        <div class="px-4 py-3 bg-slate-100 rounded-xl text-slate-700 font-medium">
+                            {{ transferDialogStock?.warehouseName }}
+                            <span class="text-sm text-slate-500 ms-2">
+                                ({{ 'INVENTORY.AVAILABLE' | translate }}: {{ transferDialogStock?.quantityAvailable }})
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Destination Warehouse -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                            {{ 'INVENTORY.TO_WAREHOUSE' | translate }}
+                        </label>
+                        <select [(ngModel)]="transferTargetWarehouseId"
+                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option [ngValue]="null">{{ 'INVENTORY.SELECT_WAREHOUSE' | translate }}</option>
+                            <option *ngFor="let wh of getAvailableWarehousesForTransfer()" [ngValue]="wh.id">
+                                {{ wh.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                            {{ 'INVENTORY.QUANTITY' | translate }}
+                        </label>
+                        <input type="number" [(ngModel)]="transferQuantity" min="1"
+                            [max]="transferDialogStock?.quantityAvailable ?? 0"
+                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="0">
+                    </div>
+
+                    <!-- Reason -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                            {{ 'INVENTORY.REASON' | translate }} <span class="text-slate-400">({{ 'COMMON.OPTIONAL' |
+                                translate }})</span>
+                        </label>
+                        <textarea [(ngModel)]="transferReason" rows="2"
+                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                            placeholder=""></textarea>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+                    <button type="button" (click)="closeTransferDialog()"
+                        class="px-4 py-2.5 text-slate-600 font-medium rounded-xl hover:bg-slate-100 transition-colors">
+                        {{ 'COMMON.CANCEL' | translate }}
+                    </button>
+                    <button type="button" (click)="confirmTransferStock()"
+                        [disabled]="!transferTargetWarehouseId || transferQuantity <= 0 || transferDialogSubmitting"
+                        class="px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span *ngIf="transferDialogSubmitting" class="me-2">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                        {{ 'INVENTORY.TRANSFER' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div *ngIf="showToast"
+        class="fixed bottom-6 start-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-fade-in"
+        [ngClass]="toastType === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'">
+        <i [class]="toastType === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
+        <span class="font-medium">{{ toastMessage }}</span>
+    </div>
+</div>

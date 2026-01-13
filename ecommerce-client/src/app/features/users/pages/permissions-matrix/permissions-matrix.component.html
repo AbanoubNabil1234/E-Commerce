@@ -1,0 +1,170 @@
+<!-- Permissions Matrix Component -->
+<div class="permissions-page">
+    <div class="page-layout">
+        <!-- Left Sidebar - Roles -->
+        <aside class="roles-sidebar">
+            <div class="sidebar-header">
+                <h2>System Roles</h2>
+                <p>Manage role definitions</p>
+                <button class="btn-add" routerLink="/users/roles/create">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <nav class="roles-list">
+                @for (r of roles(); track r.id) {
+                <a class="role-item" [class.active]="r.id === roleId()" (click)="onRoleSelect(r.id)">
+                    <i class="fas fa-user-shield"></i>
+                    <span class="role-name">{{ r.name }}</span>
+                    <span class="permission-count">{{ r.permissionsCount }}</span>
+                </a>
+                }
+            </nav>
+
+            <div class="audit-tip">
+                <i class="fas fa-info-circle"></i>
+                <div class="tip-content">
+                    <strong>Audit Tip</strong>
+                    <p>Changes to role permissions are logged and tracked for compliance audits.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content - Permissions Matrix -->
+        <main class="permissions-content">
+            @if (loading()) {
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <span>Loading permissions...</span>
+            </div>
+            } @else if (role()) {
+            <!-- Header -->
+            <header class="content-header">
+                <nav class="breadcrumb">
+                    <span>SETTINGS</span>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>USER MANAGEMENT</span>
+                    <i class="fas fa-chevron-right"></i>
+                    <span class="current">ROLES & PERMISSIONS</span>
+                </nav>
+
+                <div class="header-row">
+                    <div class="header-info">
+                        <h1>Permissions Matrix</h1>
+                        <p>Configure access levels for the <strong>{{ role()?.name }}</strong> role</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-secondary">
+                            <i class="fas fa-download"></i>
+                            Export CSV
+                        </button>
+                        <button class="btn-outline">
+                            <i class="fas fa-history"></i>
+                            Activity Log
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Permissions Table -->
+            <div class="permissions-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="module-col">ERP MODULE</th>
+                            <th class="perm-col">VIEW</th>
+                            <th class="perm-col">CREATE</th>
+                            <th class="perm-col">EDIT</th>
+                            <th class="perm-col">DELETE</th>
+                            <th class="perm-col">EXPORT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (group of permissionGroups(); track group.module) {
+                        <tr class="group-header">
+                            <td colspan="6">
+                                <span class="group-label" [style.color]="getModuleColor(group.module)">
+                                    {{ group.module | uppercase }}
+                                </span>
+                            </td>
+                        </tr>
+                        @for (permission of group.permissions; track permission.id) {
+                        <tr class="permission-row">
+                            <td class="module-name">{{ permission.description || permission.name }}</td>
+                            <td class="perm-cell">
+                                @if (permission.name.includes('.view') || permission.name.includes('.View')) {
+                                <label class="checkbox">
+                                    <input type="checkbox" [checked]="isPermissionEnabled(permission.id)"
+                                        (change)="togglePermission(permission.id)">
+                                    <span class="checkmark"></span>
+                                </label>
+                                }
+                            </td>
+                            <td class="perm-cell">
+                                @if (permission.name.includes('.create') || permission.name.includes('.Create')) {
+                                <label class="checkbox">
+                                    <input type="checkbox" [checked]="isPermissionEnabled(permission.id)"
+                                        (change)="togglePermission(permission.id)">
+                                    <span class="checkmark"></span>
+                                </label>
+                                }
+                            </td>
+                            <td class="perm-cell">
+                                @if (permission.name.includes('.edit') || permission.name.includes('.Edit')) {
+                                <label class="checkbox">
+                                    <input type="checkbox" [checked]="isPermissionEnabled(permission.id)"
+                                        (change)="togglePermission(permission.id)">
+                                    <span class="checkmark"></span>
+                                </label>
+                                }
+                            </td>
+                            <td class="perm-cell">
+                                @if (permission.name.includes('.delete') || permission.name.includes('.Delete')) {
+                                <label class="checkbox">
+                                    <input type="checkbox" [checked]="isPermissionEnabled(permission.id)"
+                                        (change)="togglePermission(permission.id)">
+                                    <span class="checkmark"></span>
+                                </label>
+                                }
+                            </td>
+                            <td class="perm-cell">
+                                @if (permission.name.includes('.export') || permission.name.includes('.Export')) {
+                                <label class="checkbox">
+                                    <input type="checkbox" [checked]="isPermissionEnabled(permission.id)"
+                                        (change)="togglePermission(permission.id)">
+                                    <span class="checkmark"></span>
+                                </label>
+                                }
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Actions -->
+            @if (hasChanges()) {
+            <footer class="changes-bar">
+                <div class="changes-info">
+                    <span class="changes-dot"></span>
+                    <span>Unsaved Changes</span>
+                    <span class="changes-detail">Permissions modified</span>
+                </div>
+                <div class="changes-actions">
+                    <button class="btn-secondary" (click)="onDiscard()">
+                        Discard Changes
+                    </button>
+                    <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+                        @if (saving()) {
+                        <span class="spinner-sm"></span>
+                        }
+                        Save Permission Set
+                    </button>
+                </div>
+            </footer>
+            }
+            }
+        </main>
+    </div>
+</div>
